@@ -1,0 +1,14 @@
+[package]
+name = "spectrum"
+version = "0.1.0"
+edition = "2024"
+description = ""
+
+[dependencies]
+derive_more = "*"
+
+[features]
+default = [
+	"derive_more/deref",
+	"derive_more/deref_mut"
+]
