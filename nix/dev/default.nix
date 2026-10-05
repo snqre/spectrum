@@ -17,6 +17,7 @@
 			];
 
 			nativeBuildInputs = [
+				pkgs.license-generator
 				pkgs.bash-language-server
 				pkgs.nixd
 				pkgs.nixpkgs-fmt

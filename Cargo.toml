@@ -2,7 +2,8 @@
 name = "spectrum"
 version = "0.1.0"
 edition = "2024"
-description = ""
+description = "Fixed-point data type collection"
+license = "Apache-2.0"
 
 [dependencies]
 derive_more = "*"
