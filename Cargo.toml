@@ -7,7 +7,8 @@ license = "Apache-2.0"
 readme = "readme.md"
 
 [dependencies]
-derive_more = "*"
+derive_more = ">=1.0.0,<2.0.0"
+num_ops = ">=0.1.0,<1.0.0"
 
 [features]
 default = [
