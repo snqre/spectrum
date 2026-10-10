@@ -33,9 +33,12 @@ use num_traits::ConstZero;
 
 modwire::expose! {
 	pub arithmetic
+	pub clone
 	pub conversion
+	pub eq
 	pub exponent
 	pub fmt
+	pub ord
 }
 
 pub type Result<T> = core::result::Result<T, Error>;
@@ -158,56 +161,3 @@ impl<const A: Exponent, B> Denomination for With<A, B> {
 pub struct FixedPointValue<T>(T::Scalar)
 where
 	T: Denomination;
-
-impl<T> Clone for FixedPointValue<T>
-where
-	T: Denomination,
-	T::Scalar: Clone {
-	#[inline]
-	fn clone(&self) -> Self {
-		Self(self.0.clone())
-	}
-}
-
-impl<T> Copy for FixedPointValue<T>
-where
-	T: Denomination,
-	T::Scalar: Copy {}
-
-impl<T> PartialEq for FixedPointValue<T>
-where
-	T: Denomination,
-	T::Scalar: PartialEq {
-	fn eq(&self, other: &Self) -> bool {
-		self.0 == other.0
-	}
-}
-
-impl<T> Eq for FixedPointValue<T>
-where
-	T: Denomination,
-	T::Scalar: Eq {}
-
-impl<T> PartialOrd for FixedPointValue<T>
-where
-	T: Denomination,
-	T::Scalar: PartialOrd {
-	fn partial_cmp(&self, other: &Self) -> Option<core::cmp::Ordering> {
-		let lhs: &T::Scalar = &self.0;
-		let rhs: &T::Scalar = &other.0;
-
-		lhs.partial_cmp(rhs)
-	}
-}
-
-impl<T> Ord for FixedPointValue<T>
-where
-	T: Denomination,
-	T::Scalar: Ord {
-	fn cmp(&self, other: &Self) -> core::cmp::Ordering {
-		let lhs: &T::Scalar = &self.0;
-		let rhs: &T::Scalar = &other.0;
-
-		lhs.cmp(rhs)
-	}
-}
