@@ -19,37 +19,15 @@ fn benchmark(c: &mut Criterion) {
 	let lhs: FixedPointValue<_> = FixedPointValue::<With<2, u64>>::from_u64(20_00).unwrap();
 	let rhs: FixedPointValue<_> = FixedPointValue::<With<2, u64>>::from_u64(20_00).unwrap();
 
-	group.bench_function("reference_add_f66", |b| {
-		b.iter(|| black_box(20.0) + black_box(20.0))
-	});
+	group.bench_function("reference_add_f66", |b| b.iter(|| black_box(20.0) + black_box(20.0)));
+	group.bench_function("reference_sub_f64", |b| b.iter(|| black_box(20.0) - black_box(20.0)));
+	group.bench_function("reference_mul_f64", |b| b.iter(|| black_box(20.0) * black_box(20.0)));
+	group.bench_function("reference_div_f64", |b| b.iter(|| black_box(20.0) / black_box(20.0)));
 
-	group.bench_function("reference_sub_f64", |b| {
-		b.iter(|| black_box(20.0) - black_box(20.0))
-	});
-
-	group.bench_function("reference_mul_f64", |b| {
-		b.iter(|| black_box(20.0) * black_box(20.0))
-	});
-
-	group.bench_function("reference_div_f64", |b| {
-		b.iter(|| black_box(20.0) / black_box(20.0))
-	});
-
-	group.bench_function("add", |b| {
-		b.iter(|| black_box(lhs) + black_box(rhs))
-	});
-
-	group.bench_function("sub", |b| {
-		b.iter(|| black_box(lhs) - black_box(rhs))
-	});
-
-	group.bench_function("mul", |b| {
-		b.iter(|| black_box(lhs) * black_box(rhs))
-	});
-
-	group.bench_function("div", |b| {
-		b.iter(|| black_box(lhs) / black_box(rhs))
-	});
+	group.bench_function("add", |b| b.iter(|| black_box(lhs) + black_box(rhs)));
+	group.bench_function("sub", |b| b.iter(|| black_box(lhs) - black_box(rhs)));
+	group.bench_function("mul", |b| b.iter(|| black_box(lhs) * black_box(rhs)));
+	group.bench_function("div", |b| b.iter(|| black_box(lhs) / black_box(rhs)));
 
 	group.bench_function("to_u8", |b| b.iter(|| black_box(lhs).to_u8()));
 	group.bench_function("to_u16", |b| b.iter(|| black_box(lhs).to_u16()));
