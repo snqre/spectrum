@@ -8,10 +8,36 @@ readme = "readme.md"
 
 [dependencies]
 derive_more = ">=1.0.0,<2.0.0"
-num_ops = ">=0.1.0,<1.0.0"
+num-traits = "0.2.19"
+duplicate = "2.0.1"
+thiserror = "2.0.21"
+ethnum = "1.5.3"
+constime = "0.4.1"
+rstest = "0.27.0"
+modwire = "0.1.0"
+
+[dev-dependencies]
+criterion = ">=0.1.0,<1.0.0"
+
+[[bench]]
+name = "benchmark"
+harness = false
 
 [features]
 default = [
+	"std",
+	"num-traits/std",
 	"derive_more/deref",
-	"derive_more/deref_mut"
+	"derive_more/deref_mut",
+	"derive_more/add",
+	"derive_more/add_assign",
+	"derive_more/mul",
+	"derive_more/mul_assign",
+	"derive_more/try_from",
+	"derive_more/try_into",
+	"derive_more/from",
+	"derive_more/into",
+	"derive_more/as_ref",
+	"derive_more/display"
 ]
+std = []
