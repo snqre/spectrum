@@ -12,12 +12,12 @@ criterion_main!(arithmetic);
 fn benchmark(c: &mut Criterion) {
 	use num_traits::FromPrimitive as _;
 	use num_traits::ToPrimitive as _;
-	use spectrum::{FixedPointValue, With};
+	use spectrum::{With, AsScale, I32F2};
 
 	let mut group: criterion::BenchmarkGroup<_> = c.benchmark_group("arithmetic");
 
-	let lhs: FixedPointValue<_> = FixedPointValue::<With<2, u64>>::from_u64(20_00).unwrap();
-	let rhs: FixedPointValue<_> = FixedPointValue::<With<2, u64>>::from_u64(20_00).unwrap();
+	let lhs: I32F2 = 20_00.q();
+	let rhs: I32F2 = 20_00.q();
 
 	group.bench_function("reference_add_f66", |b| b.iter(|| black_box(20.0) + black_box(20.0)));
 	group.bench_function("reference_sub_f64", |b| b.iter(|| black_box(20.0) - black_box(20.0)));

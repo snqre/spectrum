@@ -171,7 +171,6 @@ impl NextWidest for isize {
     }
 }
 
-
 impl<T> FixedPointValue<T>
 where
     T: Denomination,
@@ -180,6 +179,7 @@ where
 	<T::Scalar as NextWidest>::Scalar: Mul<Output = <T::Scalar as NextWidest>::Scalar>,
 	<T::Scalar as NextWidest>::Scalar: Div<Output = <T::Scalar as NextWidest>::Scalar> {
 
+	#[inline]
     pub(crate) fn mul(lhs: T::Scalar, rhs: T::Scalar) -> Result<T::Scalar>
     where
         T::Scalar: Sign + FromPrimitive {
@@ -208,6 +208,7 @@ where
         }
     }
 
+    #[inline]
     pub(crate) fn div(lhs: T::Scalar, rhs: T::Scalar) -> Result<T::Scalar>
     where
         T::Scalar: Sign + FromPrimitive {
@@ -275,6 +276,21 @@ where
 	}
 }
 
+impl<T> Add<&FixedPointValue<T>> for FixedPointValue<T>
+where
+	T: Denomination,
+	T::Scalar: Copy + Add<T::Scalar, Output = T::Scalar> {
+	type Output = Self;
+
+	#[inline]
+	fn add(self, rhs: &FixedPointValue<T>) -> Self::Output {
+		let lhs: T::Scalar = self.0;
+		let rhs: T::Scalar = rhs.0;
+
+		Self(lhs + rhs)
+	}
+}
+
 impl<T> Sub for FixedPointValue<T>
 where
 	T: Denomination,
@@ -283,6 +299,21 @@ where
 
 	#[inline]
 	fn sub(self, rhs: Self) -> Self::Output {
+		let lhs: T::Scalar = self.0;
+		let rhs: T::Scalar = rhs.0;
+
+		Self(lhs - rhs)
+	}
+}
+
+impl<T> Sub<&FixedPointValue<T>> for FixedPointValue<T>
+where
+	T: Denomination,
+	T::Scalar: Copy + Sub<T::Scalar, Output = T::Scalar> {
+	type Output = Self;
+
+	#[inline]
+	fn sub(self, rhs: &FixedPointValue<T>) -> Self::Output {
 		let lhs: T::Scalar = self.0;
 		let rhs: T::Scalar = rhs.0;
 
@@ -309,6 +340,24 @@ where
 	}
 }
 
+impl<T> Mul<&FixedPointValue<T>> for FixedPointValue<T>
+where
+    T: Denomination,
+    T::Scalar: Copy + Eq + ConstZero + NextWidest + Sign + FromPrimitive,
+	T::Scalar: TryFrom<<T::Scalar as NextWidest>::Scalar>,
+	<T::Scalar as NextWidest>::Scalar: Mul<Output = <T::Scalar as NextWidest>::Scalar>,
+	<T::Scalar as NextWidest>::Scalar: Div<Output = <T::Scalar as NextWidest>::Scalar> {
+	type Output = Self;
+
+	fn mul(self, rhs: &FixedPointValue<T>) -> Self::Output {
+		let lhs: T::Scalar = self.0;
+		let rhs: T::Scalar = rhs.0;
+
+		#[allow(clippy::unwrap_used, reason = "unchecked operation")]
+		Self::mul(lhs, rhs).map(Self).unwrap()
+	}
+}
+
 impl<T> Div for FixedPointValue<T>
 where
     T: Denomination,
@@ -320,6 +369,25 @@ where
 
 	#[inline]
 	fn div(self, rhs: Self) -> Self::Output {
+		let lhs: T::Scalar = self.0;
+		let rhs: T::Scalar = rhs.0;
+
+		#[allow(clippy::unwrap_used, reason = "unchecked operation")]
+		Self::div(lhs, rhs).map(Self).unwrap()
+	}
+}
+
+impl<T> Div<&FixedPointValue<T>> for FixedPointValue<T>
+where
+    T: Denomination,
+    T::Scalar: Copy + Eq + ConstZero + NextWidest + Sign + FromPrimitive,
+	T::Scalar: TryFrom<<T::Scalar as NextWidest>::Scalar>,
+	<T::Scalar as NextWidest>::Scalar: Mul<Output = <T::Scalar as NextWidest>::Scalar>,
+	<T::Scalar as NextWidest>::Scalar: Div<Output = <T::Scalar as NextWidest>::Scalar> {
+	type Output = Self;
+
+	#[inline]
+	fn div(self, rhs: &FixedPointValue<T>) -> Self::Output {
 		let lhs: T::Scalar = self.0;
 		let rhs: T::Scalar = rhs.0;
 
@@ -387,6 +455,144 @@ where
 		let rhs: T::Scalar = v.0;
 
 		Self::div(lhs, rhs).map(Self).ok()
+	}
+}
+
+mod borrow {
+	use super::*;
+
+	impl<T> Add<FixedPointValue<T>> for &FixedPointValue<T>
+	where
+		T: Denomination,
+		T::Scalar: Copy + Add<T::Scalar, Output = T::Scalar> {
+		type Output = FixedPointValue<T>;
+
+		#[inline]
+		fn add(self, rhs: FixedPointValue<T>) -> Self::Output {
+			let lhs: T::Scalar = self.0;
+			let rhs: T::Scalar = rhs.0;
+
+			FixedPointValue(lhs + rhs)
+		}
+	}
+
+	impl<T> Add<&FixedPointValue<T>> for &FixedPointValue<T>
+	where
+		T: Denomination,
+		T::Scalar: Copy + Add<T::Scalar, Output = T::Scalar> {
+		type Output = FixedPointValue<T>;
+
+		#[inline]
+		fn add(self, rhs: &FixedPointValue<T>) -> Self::Output {
+			let lhs: T::Scalar = self.0;
+			let rhs: T::Scalar = rhs.0;
+
+			FixedPointValue(lhs + rhs)
+		}
+	}
+
+	impl<T> Sub<FixedPointValue<T>> for &FixedPointValue<T>
+	where
+		T: Denomination,
+		T::Scalar: Copy + Sub<T::Scalar, Output = T::Scalar> {
+		type Output = FixedPointValue<T>;
+
+		#[inline]
+		fn sub(self, rhs: FixedPointValue<T>) -> Self::Output {
+			let lhs: T::Scalar = self.0;
+			let rhs: T::Scalar = rhs.0;
+
+			FixedPointValue(lhs - rhs)
+		}
+	}
+
+	impl<T> Sub<&FixedPointValue<T>> for &FixedPointValue<T>
+	where
+		T: Denomination,
+		T::Scalar: Copy + Sub<T::Scalar, Output = T::Scalar> {
+		type Output = FixedPointValue<T>;
+
+		#[inline]
+		fn sub(self, rhs: &FixedPointValue<T>) -> Self::Output {
+			let lhs: T::Scalar = self.0;
+			let rhs: T::Scalar = rhs.0;
+
+			FixedPointValue(lhs - rhs)
+		}
+	}
+
+	impl<T> Mul<FixedPointValue<T>> for &FixedPointValue<T>
+	where
+	    T: Denomination,
+	    T::Scalar: Copy + Eq + ConstZero + NextWidest + Sign + FromPrimitive,
+		T::Scalar: TryFrom<<T::Scalar as NextWidest>::Scalar>,
+		<T::Scalar as NextWidest>::Scalar: Mul<Output = <T::Scalar as NextWidest>::Scalar>,
+		<T::Scalar as NextWidest>::Scalar: Div<Output = <T::Scalar as NextWidest>::Scalar> {
+		type Output = FixedPointValue<T>;
+
+		fn mul(self, rhs: FixedPointValue<T>) -> Self::Output {
+			let lhs: T::Scalar = self.0;
+			let rhs: T::Scalar = rhs.0;
+
+			#[allow(clippy::unwrap_used, reason = "unchecked operation")]
+			FixedPointValue(FixedPointValue::<T>::mul(lhs, rhs).unwrap())
+		}
+	}
+
+	impl<T> Mul<&FixedPointValue<T>> for &FixedPointValue<T>
+	where
+	    T: Denomination,
+	    T::Scalar: Copy + Eq + ConstZero + NextWidest + Sign + FromPrimitive,
+		T::Scalar: TryFrom<<T::Scalar as NextWidest>::Scalar>,
+		<T::Scalar as NextWidest>::Scalar: Mul<Output = <T::Scalar as NextWidest>::Scalar>,
+		<T::Scalar as NextWidest>::Scalar: Div<Output = <T::Scalar as NextWidest>::Scalar> {
+		type Output = FixedPointValue<T>;
+
+		fn mul(self, rhs: &FixedPointValue<T>) -> Self::Output {
+			let lhs: T::Scalar = self.0;
+			let rhs: T::Scalar = rhs.0;
+
+			#[allow(clippy::unwrap_used, reason = "unchecked operation")]
+			FixedPointValue(FixedPointValue::<T>::mul(lhs, rhs).unwrap())
+		}
+	}
+
+	impl<T> Div<FixedPointValue<T>> for &FixedPointValue<T>
+	where
+	    T: Denomination,
+	    T::Scalar: Copy + Eq + ConstZero + NextWidest + Sign + FromPrimitive,
+		T::Scalar: TryFrom<<T::Scalar as NextWidest>::Scalar>,
+		<T::Scalar as NextWidest>::Scalar: Mul<Output = <T::Scalar as NextWidest>::Scalar>,
+		<T::Scalar as NextWidest>::Scalar: Div<Output = <T::Scalar as NextWidest>::Scalar> {
+		type Output = FixedPointValue<T>;
+
+		#[inline]
+		fn div(self, rhs: FixedPointValue<T>) -> Self::Output {
+			let lhs: T::Scalar = self.0;
+			let rhs: T::Scalar = rhs.0;
+
+			#[allow(clippy::unwrap_used, reason = "unchecked operation")]
+			FixedPointValue(FixedPointValue::<T>::div(lhs, rhs).unwrap())
+		}
+	}
+
+	impl<T> Div<&FixedPointValue<T>> for &FixedPointValue<T>
+	where
+	    T: Denomination,
+	    T::Scalar: Copy + Eq + ConstZero + NextWidest + Sign + FromPrimitive,
+		T::Scalar: TryFrom<<T::Scalar as NextWidest>::Scalar>,
+		<T::Scalar as NextWidest>::Scalar: Mul<Output = <T::Scalar as NextWidest>::Scalar>,
+		<T::Scalar as NextWidest>::Scalar: Div<Output = <T::Scalar as NextWidest>::Scalar> {
+		type Output = FixedPointValue<T>;
+
+		#[inline]
+		fn div(self, rhs: &FixedPointValue<T>) -> Self::Output {
+			let lhs: T::Scalar = self.0;
+			let rhs: T::Scalar = rhs.0;
+
+			#[allow(clippy::unwrap_used, reason = "unchecked operation")]
+			FixedPointValue(FixedPointValue::<T>::div(lhs, rhs).unwrap())
+		}
 	}
 }
 

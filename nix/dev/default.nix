@@ -19,6 +19,7 @@
 			nativeBuildInputs = [
 				pkgs.license-generator
 				pkgs.bash-language-server
+				pkgs.mdwatch
 				pkgs.nixd
 				pkgs.nixpkgs-fmt
 				pkgs.git

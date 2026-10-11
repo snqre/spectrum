@@ -2,6 +2,85 @@
 
 use super::*;
 
+pub trait AsScale
+where
+	Self: Sized {
+	fn q<const T: Exponent>(&self) -> FixedPointValue<With<T, Self>>;
+}
+
+impl AsScale for u8 {
+	fn q<const T: Exponent>(&self) -> FixedPointValue<With<T, Self>> {
+    	FixedPointValue(self.clone())
+	}
+}
+
+impl AsScale for u16 {
+	fn q<const T: Exponent>(&self) -> FixedPointValue<With<T, Self>> {
+    	FixedPointValue(self.clone())
+	}
+}
+
+impl AsScale for u32 {
+	fn q<const T: Exponent>(&self) -> FixedPointValue<With<T, Self>> {
+    	FixedPointValue(self.clone())
+	}
+}
+
+impl AsScale for u64 {
+	fn q<const T: Exponent>(&self) -> FixedPointValue<With<T, Self>> {
+    	FixedPointValue(self.clone())
+	}
+}
+
+impl AsScale for u128 {
+	fn q<const T: Exponent>(&self) -> FixedPointValue<With<T, Self>> {
+    	FixedPointValue(self.clone())
+	}
+}
+
+impl AsScale for usize {
+	fn q<const T: Exponent>(&self) -> FixedPointValue<With<T, Self>> {
+    	FixedPointValue(self.clone())
+	}
+}
+
+impl AsScale for i8 {
+	fn q<const T: Exponent>(&self) -> FixedPointValue<With<T, Self>> {
+    	FixedPointValue(self.clone())
+	}
+}
+
+impl AsScale for i16 {
+	fn q<const T: Exponent>(&self) -> FixedPointValue<With<T, Self>> {
+    	FixedPointValue(self.clone())
+	}
+}
+
+impl AsScale for i32 {
+	fn q<const T: Exponent>(&self) -> FixedPointValue<With<T, Self>> {
+    	FixedPointValue(self.clone())
+	}
+}
+
+impl AsScale for i64 {
+	fn q<const T: Exponent>(&self) -> FixedPointValue<With<T, Self>> {
+    	FixedPointValue(self.clone())
+	}
+}
+
+impl AsScale for i128 {
+	fn q<const T: Exponent>(&self) -> FixedPointValue<With<T, Self>> {
+    	FixedPointValue(self.clone())
+	}
+}
+
+impl AsScale for isize {
+	fn q<const T: Exponent>(&self) -> FixedPointValue<With<T, Self>> {
+    	FixedPointValue(self.clone())
+	}
+}
+
+
 impl<T> FromPrimitive for FixedPointValue<T>
 where
 	T: Denomination,
