@@ -617,4 +617,68 @@ mod test {
 	fn div(#[case] lhs: i64, #[case] rhs: i64, #[case] answer: i64) {
 		assert_eq!(FixedPointValue::<With<2, i64>>::div(lhs, rhs).unwrap(), answer);
 	}
+
+	#[allow(clippy::large_digit_groups)]
+	#[rstest::rstest]
+	fn div_loop_via_float_conversion() {
+		let mut x: I64F9 = I64F9::from_f32(1.0).unwrap();
+		let y: I64F9 = I64F9::from_f64(2.0).unwrap();
+		let z: I64F9 = I64F9::from_f64(1.0 / 64.0).unwrap();
+
+		x = x / y;
+
+		assert_eq!(x.as_inner(), 0_500000000);
+
+		x = x / y;
+
+		assert_eq!(x.as_inner(), 0_250000000);
+
+		x = x / y;
+
+		assert_eq!(x.as_inner(), 0_125000000);
+
+		x = x / y;
+
+		assert_eq!(x.as_inner(), 0_062500000);
+
+		x = x / y;
+
+		assert_eq!(x.as_inner(), 0_031250000);
+
+		x = x / y;
+
+		assert_eq!(x.as_inner(), 0_015625000);
+	}
+
+	#[allow(clippy::large_digit_groups)]
+	#[rstest::rstest]
+	fn div_loop_via_exact_conversion() {
+		let mut x: I64F9 = 1_000000000.as_fixed_point_value();
+		let y: I64F9 = 2_000000000.as_fixed_point_value();
+		let z: I64F9 = 0_015625000.as_fixed_point_value();
+
+		x = x / y;
+
+		assert_eq!(x.as_inner(), 0_500000000);
+
+		x = x / y;
+
+		assert_eq!(x.as_inner(), 0_250000000);
+
+		x = x / y;
+
+		assert_eq!(x.as_inner(), 0_125000000);
+
+		x = x / y;
+
+		assert_eq!(x.as_inner(), 0_062500000);
+
+		x = x / y;
+
+		assert_eq!(x.as_inner(), 0_031250000);
+
+		x = x / y;
+
+		assert_eq!(x.as_inner(), 0_015625000);
+	}
 }

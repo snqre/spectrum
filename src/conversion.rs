@@ -137,11 +137,17 @@ where
 	}
 
 	fn from_f32(n: f32) -> Option<Self> {
-		Some(Self(T::Scalar::from_f64(n.to_f64()? / T::F64_RECIPROCAL)?))
+		let scaled: f32 = n * T::BASE.to_f32()?;
+		let scaled: f32 = scaled.round();
+
+		Some(Self(T::Scalar::from_f32(scaled)?))
 	}
 
 	fn from_f64(n: f64) -> Option<Self> {
-		Some(Self(T::Scalar::from_f64(n / T::F64_RECIPROCAL)?))
+		let scaled: f64 = n * T::BASE.to_f64()?;
+		let scaled: f64 = scaled.round();
+
+		Some(Self(T::Scalar::from_f64(scaled)?))
 	}
 }
 
@@ -211,6 +217,20 @@ where
 #[cfg(test)]
 mod test {
 	use super::*;
+
+	#[rstest::rstest]
+	#[case(1, 1_00)]
+	#[case(2, 2_00)]
+	fn from_u8(#[case] n: u8, #[case] answer: u8) {
+		assert_eq!(U8F2::from_u8(n).unwrap().as_inner(), answer);
+	}
+
+	#[rstest::rstest]
+	#[case(2.0, 2_00)]
+	#[case(2.89, 2_89)]
+	fn from_f32(#[case] n: f32, #[case] answer: i32) {
+		assert_eq!(I32F2::from_f32(n).unwrap().as_inner(), answer);
+	}
 
 	#[rstest::rstest]
 	#[case(20_00, 20)]
