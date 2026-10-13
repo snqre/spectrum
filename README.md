@@ -20,7 +20,7 @@ The core of the library revolves around the `Denomination` trait and the `FixedP
 ## Example
 
 ```rust
-use reliq::{I64F2, Result};
+use reliq::{I64F2, Result, AsFixedPointValue as _};
 
 fn main() -> Result {
 	let x: I64F2 = 10_00.as_fixed_point_value();
