@@ -31,7 +31,6 @@ fn main() -> Result {
 	let c = x * y; //  5.00
 	let d = x / y; // 20.00
 }
-
 ```
 
 ## Error Handling
