@@ -1,81 +1,84 @@
-// module will require better conversion
-
 use super::*;
 
-pub trait AsScale
+/// Allows primitive integers to be interpreted directly as fixed-point representations at a specified exponent, without performing any numerical scaling or conversion.
+pub trait AsFixedPointValue
 where
 	Self: Sized {
-	fn q<const T: Exponent>(&self) -> FixedPointValue<With<T, Self>>;
+
+	/// Wraps a raw value into a [`FixedPointValue`] using the specified exponent `T`.
+	///
+	/// > Does not rescale or convert the raw value; it is interpreted as-is.
+	fn as_fixed_point_value<const T: Exponent>(&self) -> FixedPointValue<With<T, Self>>;
 }
 
-impl AsScale for u8 {
-	fn q<const T: Exponent>(&self) -> FixedPointValue<With<T, Self>> {
+impl AsFixedPointValue for u8 {
+	fn as_fixed_point_value<const T: Exponent>(&self) -> FixedPointValue<With<T, Self>> {
     	FixedPointValue(self.clone())
 	}
 }
 
-impl AsScale for u16 {
-	fn q<const T: Exponent>(&self) -> FixedPointValue<With<T, Self>> {
+impl AsFixedPointValue for u16 {
+	fn as_fixed_point_value<const T: Exponent>(&self) -> FixedPointValue<With<T, Self>> {
     	FixedPointValue(self.clone())
 	}
 }
 
-impl AsScale for u32 {
-	fn q<const T: Exponent>(&self) -> FixedPointValue<With<T, Self>> {
+impl AsFixedPointValue for u32 {
+	fn as_fixed_point_value<const T: Exponent>(&self) -> FixedPointValue<With<T, Self>> {
     	FixedPointValue(self.clone())
 	}
 }
 
-impl AsScale for u64 {
-	fn q<const T: Exponent>(&self) -> FixedPointValue<With<T, Self>> {
+impl AsFixedPointValue for u64 {
+	fn as_fixed_point_value<const T: Exponent>(&self) -> FixedPointValue<With<T, Self>> {
     	FixedPointValue(self.clone())
 	}
 }
 
-impl AsScale for u128 {
-	fn q<const T: Exponent>(&self) -> FixedPointValue<With<T, Self>> {
+impl AsFixedPointValue for u128 {
+	fn as_fixed_point_value<const T: Exponent>(&self) -> FixedPointValue<With<T, Self>> {
     	FixedPointValue(self.clone())
 	}
 }
 
-impl AsScale for usize {
-	fn q<const T: Exponent>(&self) -> FixedPointValue<With<T, Self>> {
+impl AsFixedPointValue for usize {
+	fn as_fixed_point_value<const T: Exponent>(&self) -> FixedPointValue<With<T, Self>> {
     	FixedPointValue(self.clone())
 	}
 }
 
-impl AsScale for i8 {
-	fn q<const T: Exponent>(&self) -> FixedPointValue<With<T, Self>> {
+impl AsFixedPointValue for i8 {
+	fn as_fixed_point_value<const T: Exponent>(&self) -> FixedPointValue<With<T, Self>> {
     	FixedPointValue(self.clone())
 	}
 }
 
-impl AsScale for i16 {
-	fn q<const T: Exponent>(&self) -> FixedPointValue<With<T, Self>> {
+impl AsFixedPointValue for i16 {
+	fn as_fixed_point_value<const T: Exponent>(&self) -> FixedPointValue<With<T, Self>> {
     	FixedPointValue(self.clone())
 	}
 }
 
-impl AsScale for i32 {
-	fn q<const T: Exponent>(&self) -> FixedPointValue<With<T, Self>> {
+impl AsFixedPointValue for i32 {
+	fn as_fixed_point_value<const T: Exponent>(&self) -> FixedPointValue<With<T, Self>> {
     	FixedPointValue(self.clone())
 	}
 }
 
-impl AsScale for i64 {
-	fn q<const T: Exponent>(&self) -> FixedPointValue<With<T, Self>> {
+impl AsFixedPointValue for i64 {
+	fn as_fixed_point_value<const T: Exponent>(&self) -> FixedPointValue<With<T, Self>> {
     	FixedPointValue(self.clone())
 	}
 }
 
-impl AsScale for i128 {
-	fn q<const T: Exponent>(&self) -> FixedPointValue<With<T, Self>> {
+impl AsFixedPointValue for i128 {
+	fn as_fixed_point_value<const T: Exponent>(&self) -> FixedPointValue<With<T, Self>> {
     	FixedPointValue(self.clone())
 	}
 }
 
-impl AsScale for isize {
-	fn q<const T: Exponent>(&self) -> FixedPointValue<With<T, Self>> {
+impl AsFixedPointValue for isize {
+	fn as_fixed_point_value<const T: Exponent>(&self) -> FixedPointValue<With<T, Self>> {
     	FixedPointValue(self.clone())
 	}
 }

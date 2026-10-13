@@ -519,6 +519,21 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "ba39f3699c378cd8970968dcbff9c43159ea4cfbd88d43c00b22f2ef10a435d2"
 
 [[package]]
+name = "reliq"
+version = "0.4.0"
+dependencies = [
+ "constime",
+ "criterion",
+ "derive_more",
+ "duplicate",
+ "ethnum",
+ "modwire",
+ "num-traits",
+ "rstest",
+ "thiserror",
+]
+
+[[package]]
 name = "rstest"
 version = "0.27.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -631,21 +646,6 @@ name = "slab"
 version = "0.4.12"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "0c790de23124f9ab44544d7ac05d60440adc586479ce501c1d6d7da3cd8c9cf5"
-
-[[package]]
-name = "spectrum"
-version = "0.1.0"
-dependencies = [
- "constime",
- "criterion",
- "derive_more",
- "duplicate",
- "ethnum",
- "modwire",
- "num-traits",
- "rstest",
- "thiserror",
-]
 
 [[package]]
 name = "syn"

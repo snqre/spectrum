@@ -46,7 +46,7 @@ modwire::expose! {
 	pub zero
 }
 
-pub type Result<T> = core::result::Result<T, Error>;
+pub type Result<T = ()> = core::result::Result<T, Error>;
 
 #[derive(Debug, thiserror::Error)]
 pub enum Error {
@@ -370,23 +370,23 @@ impl Distance for I64F9 {
 	}
 
 	fn as_um(&self) -> I64F9 {
-		self.as_inner().div_euclid(1000).q()
+		self.as_inner().div_euclid(1000).as_fixed_point_value()
 	}
 
 	fn as_mm(&self) -> I64F9 {
-		self.as_inner().div_euclid(1000000).q()
+		self.as_inner().div_euclid(1000000).as_fixed_point_value()
 	}
 
 	fn as_cm(&self) -> I64F9 {
-		self.as_inner().div_euclid(10000000).q()
+		self.as_inner().div_euclid(10000000).as_fixed_point_value()
 	}
 
 	fn as_m(&self) -> I64F9 {
-		self.as_inner().div_euclid(1000000000).q()
+		self.as_inner().div_euclid(1000000000).as_fixed_point_value()
 	}
 
 	fn as_km(&self) -> I64F9 {
-		self.as_inner().div_euclid(1000000000000).q()
+		self.as_inner().div_euclid(1000000000000).as_fixed_point_value()
 	}
 }
 
@@ -398,8 +398,8 @@ mod test {
 
 	#[test]
 	fn as_nm() {
-		let n: I64F9 = 20_000000000.q();
+		let n: I64F9 = 20_000000000.as_fixed_point_value();
 
-		assert_eq!(n.as_cm(), 0_000002000.q());
+		assert_eq!(n.as_cm(), 0_000002000.as_fixed_point_value());
 	}
 }

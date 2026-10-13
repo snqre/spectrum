@@ -1,37 +1,45 @@
+# Feature
+- **Const-Generic Denomination**: Define custom fixed-point scales easily using `With<EXPONENT, Scalar>`.
+- **Predefined Aliases**: Hundreds of out-of-the-box type aliases for unsigned (`UxFn`) and signed (`IxFn`) numbers (e.g., `U32F4`, `I64F9`, `U128F38`).
 
-# Concept
+# Installation
 
-## `FixedPointValue<T>`
+`Cargo.toml`:
 
-
-
-```rust
-let x: I64F2 = 10_00.as_scaled();
-let y: I64F2 = 0_50.as_scaled();
-
-let sum  = x + y; // 30.50
-let diff = x - y; //  9.50
-let prod = x * y; //
-
-let x: I64F2 = 10_00.as_scaled();
-let y: I64F2 = 0_50.as_scaled();
-
-
-
-// directly mul the underlying scalar without scaling
-let a: I64F2 = 10_00.as_scaled().raw_mul(00_50.as_scaled());
-let b: I64F2 = 10_00.as_scaled().raw_div(00_50.as_scaled());
-
-assert_eq!(a, 50_000.as_scaled())
-assert_eq!(b, 20.as_scaled())
+```toml
+[dependencies]
+reliq = "0.4.0"
 ```
 
-### Error Handling
+# Concept
+The core of the library revolves around the `Denomination` trait and the `FixedPointValue<T>` struct.
 
-- `Error::ArithmeticOverflow`: The operation exceeded the capacity of the underlying scalar type.
--
+- `With<const A: Exponent, B>`: Specifies the scale factor (where base is `10^A`) and the underlying integer scalar type (`u8`, `i8`, `u32`, `i64`, `u128`, etc.).
+- `FixedPointValue<T>`: Holds the raw scalar while enforcing its fixed-point scale at compile time.
 
+## Example
+
+```rust
+use reliq::{I64F2, Result};
+
+fn main() -> Result {
+	let x: I64F2 = 10_00.as_fixed_point_value();
+	let y: I64F2 = 0_50.as_fixed_point_value();
+
+	let a = x + y; // 10.50
+	let b = x - y; //  9.50
+	let c = x * y; //  5.00
+	let d = x / y; // 20.00
+}
+
+```
+
+## Error Handling
+
+- `Error::ArithmeticOverflow`
+- `Error::ArithmeticUnderflow`
+- `Error::DivisionByZero`
 
 # License
 
-Apache-2.0
+Licensed under the Apache-2.0 license.
