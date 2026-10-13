@@ -353,7 +353,14 @@ pub type I128F38 = FixedPointValue<With<38, i128>>;
 
 
 
-pub trait Distance {
+pub trait Nm {
+	fn from_nm(n: Self) -> Self;
+	fn from_um(n: Self) -> Self;
+	fn from_mm(n: Self) -> Self;
+	fn from_cm(n: Self) -> Self;
+	fn from_km(n: Self) -> Self;
+	fn from_m(n: Self) -> Self;
+
 	fn as_nm(&self) -> I64F9;
 	fn as_um(&self) -> I64F9;
 	fn as_mm(&self) -> I64F9;
@@ -364,7 +371,31 @@ pub trait Distance {
 
 #[allow(clippy::large_digit_groups)]
 #[allow(clippy::unreadable_literal)]
-impl Distance for I64F9 {
+impl Nm for I64F9 {
+	fn from_nm(n: Self) -> Self {
+		n
+	}
+
+	fn from_um(n: Self) -> Self {
+		n.as_inner().mul(1000).as_fixed_point_value()
+	}
+
+	fn from_mm(n: Self) -> Self {
+		n.as_inner().mul(1000000).as_fixed_point_value()
+	}
+
+	fn from_cm(n: Self) -> Self {
+		n.as_inner().mul(10000000).as_fixed_point_value()
+	}
+
+	fn from_km(n: Self) -> Self {
+		n.as_inner().mul(1000000000000).as_fixed_point_value()
+	}
+
+	fn from_m(n: Self) -> Self {
+		n.as_inner().mul(1000000000).as_fixed_point_value()
+	}
+
 	fn as_nm(&self) -> I64F9 {
 		self.clone()
 	}
@@ -395,6 +426,12 @@ impl Distance for I64F9 {
 #[cfg(test)]
 mod test {
 	use super::*;
+
+	#[rstest::rstest]
+	#[case(2_540000000, 2540_000000000)]
+	fn from_nm(#[case] n: i64, #[case] answer: i64) {
+		assert_eq!(I64F9::from_um(n.as_fixed_point_value()), answer.as_fixed_point_value());
+	}
 
 	#[test]
 	fn as_nm() {
