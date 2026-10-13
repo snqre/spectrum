@@ -353,7 +353,7 @@ pub type I128F38 = FixedPointValue<With<38, i128>>;
 
 
 
-pub trait Nm {
+trait Nm {
 	fn from_nm(n: Self) -> Self;
 	fn from_um(n: Self) -> Self;
 	fn from_mm(n: Self) -> Self;
@@ -361,12 +361,23 @@ pub trait Nm {
 	fn from_km(n: Self) -> Self;
 	fn from_m(n: Self) -> Self;
 
-	fn as_nm(&self) -> I64F9;
-	fn as_um(&self) -> I64F9;
-	fn as_mm(&self) -> I64F9;
-	fn as_cm(&self) -> I64F9;
-	fn as_km(&self) -> I64F9;
-	fn as_m(&self) -> I64F9;
+	#[must_use]
+	fn as_nm(&self) -> Self;
+
+	#[must_use]
+	fn as_um(&self) -> Self;
+
+	#[must_use]
+	fn as_mm(&self) -> Self;
+
+	#[must_use]
+	fn as_cm(&self) -> Self;
+
+	#[must_use]
+	fn as_km(&self) -> Self;
+
+	#[must_use]
+	fn as_m(&self) -> Self;
 }
 
 #[allow(clippy::large_digit_groups)]
@@ -396,27 +407,27 @@ impl Nm for I64F9 {
 		n.as_inner().mul(1000000000).as_fixed_point_value()
 	}
 
-	fn as_nm(&self) -> I64F9 {
+	fn as_nm(&self) -> Self {
 		self.clone()
 	}
 
-	fn as_um(&self) -> I64F9 {
+	fn as_um(&self) -> Self {
 		self.as_inner().div_euclid(1000).as_fixed_point_value()
 	}
 
-	fn as_mm(&self) -> I64F9 {
+	fn as_mm(&self) -> Self {
 		self.as_inner().div_euclid(1000000).as_fixed_point_value()
 	}
 
-	fn as_cm(&self) -> I64F9 {
+	fn as_cm(&self) -> Self {
 		self.as_inner().div_euclid(10000000).as_fixed_point_value()
 	}
 
-	fn as_m(&self) -> I64F9 {
+	fn as_m(&self) -> Self {
 		self.as_inner().div_euclid(1000000000).as_fixed_point_value()
 	}
 
-	fn as_km(&self) -> I64F9 {
+	fn as_km(&self) -> Self {
 		self.as_inner().div_euclid(1000000000000).as_fixed_point_value()
 	}
 }
