@@ -2,7 +2,7 @@ use super::*;
 use ethnum::u256;
 use ethnum::i256;
 
-trait Sign {
+pub trait Sign {
 	const SIGNED: bool;
 }
 
@@ -55,7 +55,7 @@ impl Sign for isize {
 }
 
 
-trait NextWidest {
+pub trait NextWidest {
 	type Scalar;
 
 	fn into_next_widest_scalar(self) -> Self::Scalar;
