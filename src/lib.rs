@@ -20,6 +20,8 @@ use core::ops::Div;
 use core::ops::DivAssign;
 use core::ops::Rem;
 use core::ops::RemAssign;
+use core::ops::Index;
+use core::ops::IndexMut;
 use core::fmt::Debug;
 use core::fmt::Display;
 use num_traits::PrimInt;
@@ -346,26 +348,104 @@ pub type I128F38 = FixedPointValue<With<38, i128>>;
 
 
 
+
+
+
+
+
+
+
 pub type Dimension = usize;
 
-#[derive(Debug)]
-pub struct Point<const A: Dimension, B>([B; A]);
+pub trait Shape<const T: Dimension> {
+	const DIMENSION: usize = T;
 
-impl<T> Point<2, T> {
-	pub fn new(x: T, y: T) -> Self {
+	type Scalar;
+}
+
+#[derive(Debug)]
+pub struct Point<const A: Dimension, B>([B::Scalar; A])
+where
+	B: Shape<A>;
+
+impl<const A: Dimension, B> Index<usize> for Point<A, B>
+where
+	B: Shape<A> {
+	type Output = B::Scalar;
+
+	fn index(&self, index: usize) -> &Self::Output {
+    	&self.0[index]
+	}
+}
+
+impl<const A: Dimension, B> IndexMut<usize> for Point<A, B>
+where
+	B: Shape<A> {
+	fn index_mut(&mut self, index: usize) -> &mut Self::Output {
+    	&mut self.0[index]
+	}
+}
+
+impl<T> Point<2, T>
+where
+	T: Shape<2> {
+	pub fn new(x: T::Scalar, y: T::Scalar) -> Self {
 		Self([x, y])
 	}
 }
 
-impl<T> Point<2, T> {
-	pub fn x(&self) -> &T {
-		self.0.first().expect("at least 2 dimensional")
+impl<T> Point<2, T>
+where
+	T: Shape<2> {
+	pub fn x(&self) -> &T::Scalar {
+		self.0.first().unwrap_or_else(|| unsafe {
+			core::hint::unreachable_unchecked()
+		})
 	}
 
-	pub fn y(&self) -> &T {
-		self.0.last().expect("at least 2 dimensional")
+	pub fn y(&self) -> &T::Scalar {
+		self.0.last().unwrap_or_else(|| unsafe {
+			core::hint::unreachable_unchecked()
+		})
+	}
+}
+
+impl<T> Point<3, T>
+where
+	T: Shape<3> {
+	pub fn new(
+		x: T::Scalar,
+		y: T::Scalar,
+		z: T::Scalar
+	) -> Self {
+		Self([x, y, z])
+	}
+}
+
+impl<T> Point<3, T>
+where
+	T: Shape<3> {
+	pub fn x(&self) -> &T::Scalar {
+		self.0.first().unwrap_or_else(|| unsafe {
+			core::hint::unreachable_unchecked()
+		})
+	}
+
+	pub fn y(&self) -> &T::Scalar {
+		self.0.get(1).unwrap_or_else(|| unsafe {
+			core::hint::unreachable_unchecked()
+		})
+	}
+
+	pub fn z(&self) -> &T::Scalar {
+		self.0.last().unwrap_or_else(|| unsafe {
+			core::hint::unreachable_unchecked()
+		})
 	}
 }
 
 pub type Point2DU8F1 = Point<2, U8F1>;
 pub type Point2DU8F2 = Point<2, U8F2>;
+
+pub type Point2DI8F1 = Point<2, I8F1>;
+pub type Point2DI8F2 = Point<2, I8F2>;
