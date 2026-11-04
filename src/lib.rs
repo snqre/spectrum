@@ -7,6 +7,7 @@
 #![allow(clippy::wildcard_imports)]
 #![allow(clippy::uninlined_format_args)]
 #![allow(clippy::missing_errors_doc)]
+#![allow(clippy::missing_panics_doc)]
 
 use core::marker::PhantomData;
 use core::ops::Add;
@@ -17,6 +18,8 @@ use core::ops::Mul;
 use core::ops::MulAssign;
 use core::ops::Div;
 use core::ops::DivAssign;
+use core::ops::Rem;
+use core::ops::RemAssign;
 use core::fmt::Debug;
 use core::fmt::Display;
 use num_traits::PrimInt;
@@ -43,6 +46,8 @@ modwire::expose! {
 	pub exponent
 	pub fmt
 	pub ord
+	pub round
+	pub sqrt
 	pub zero
 }
 
@@ -341,9 +346,29 @@ pub type I128F38 = FixedPointValue<With<38, i128>>;
 
 
 
+pub type Dimension = usize;
 
+#[derive(Debug)]
+pub struct Point<const A: Dimension, B>([B; A]);
 
+impl<T> Point<2, T> {
+	pub fn new(x: T, y: T) -> Self {
+		Self([x, y])
+	}
+}
 
+impl<T> Point<2, T> {
+	pub fn x(&self) -> &T {
+		&self.0.first().expect("at least 2 dimensional")
+	}
+
+	pub fn y(&self) -> &T {
+		&self.0.last().expect("at least 2 dimensional")
+	}
+}
+
+pub type Point2DU8F1 = Point<2, U8F1>;
+pub type Point2DU8F2 = Point<2, U8F2>;
 
 
 
