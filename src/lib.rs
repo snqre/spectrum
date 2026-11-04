@@ -359,120 +359,13 @@ impl<T> Point<2, T> {
 
 impl<T> Point<2, T> {
 	pub fn x(&self) -> &T {
-		&self.0.first().expect("at least 2 dimensional")
+		self.0.first().expect("at least 2 dimensional")
 	}
 
 	pub fn y(&self) -> &T {
-		&self.0.last().expect("at least 2 dimensional")
+		self.0.last().expect("at least 2 dimensional")
 	}
 }
 
 pub type Point2DU8F1 = Point<2, U8F1>;
 pub type Point2DU8F2 = Point<2, U8F2>;
-
-
-
-
-
-
-
-
-
-trait Nm {
-	fn from_nm(n: Self) -> Self;
-	fn from_um(n: Self) -> Self;
-	fn from_mm(n: Self) -> Self;
-	fn from_cm(n: Self) -> Self;
-	fn from_km(n: Self) -> Self;
-	fn from_m(n: Self) -> Self;
-
-	#[must_use]
-	fn as_nm(&self) -> Self;
-
-	#[must_use]
-	fn as_um(&self) -> Self;
-
-	#[must_use]
-	fn as_mm(&self) -> Self;
-
-	#[must_use]
-	fn as_cm(&self) -> Self;
-
-	#[must_use]
-	fn as_km(&self) -> Self;
-
-	#[must_use]
-	fn as_m(&self) -> Self;
-}
-
-#[allow(clippy::large_digit_groups)]
-#[allow(clippy::unreadable_literal)]
-impl Nm for I64F9 {
-	fn from_nm(n: Self) -> Self {
-		n
-	}
-
-	fn from_um(n: Self) -> Self {
-		n.as_inner().mul(1000).as_fixed_point_value()
-	}
-
-	fn from_mm(n: Self) -> Self {
-		n.as_inner().mul(1000000).as_fixed_point_value()
-	}
-
-	fn from_cm(n: Self) -> Self {
-		n.as_inner().mul(10000000).as_fixed_point_value()
-	}
-
-	fn from_km(n: Self) -> Self {
-		n.as_inner().mul(1000000000000).as_fixed_point_value()
-	}
-
-	fn from_m(n: Self) -> Self {
-		n.as_inner().mul(1000000000).as_fixed_point_value()
-	}
-
-	fn as_nm(&self) -> Self {
-		self.clone()
-	}
-
-	fn as_um(&self) -> Self {
-		self.as_inner().div_euclid(1000).as_fixed_point_value()
-	}
-
-	fn as_mm(&self) -> Self {
-		self.as_inner().div_euclid(1000000).as_fixed_point_value()
-	}
-
-	fn as_cm(&self) -> Self {
-		self.as_inner().div_euclid(10000000).as_fixed_point_value()
-	}
-
-	fn as_m(&self) -> Self {
-		self.as_inner().div_euclid(1000000000).as_fixed_point_value()
-	}
-
-	fn as_km(&self) -> Self {
-		self.as_inner().div_euclid(1000000000000).as_fixed_point_value()
-	}
-}
-
-#[allow(clippy::large_digit_groups)]
-#[allow(clippy::unreadable_literal)]
-#[cfg(test)]
-mod test {
-	use super::*;
-
-	#[rstest::rstest]
-	#[case(2_540000000, 2540_000000000)]
-	fn from_nm(#[case] n: i64, #[case] answer: i64) {
-		assert_eq!(I64F9::from_um(n.as_fixed_point_value()), answer.as_fixed_point_value());
-	}
-
-	#[test]
-	fn as_nm() {
-		let n: I64F9 = 20_000000000.as_fixed_point_value();
-
-		assert_eq!(n.as_cm(), 0_000002000.as_fixed_point_value());
-	}
-}
