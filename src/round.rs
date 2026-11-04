@@ -93,3 +93,42 @@ where
 		n
 	}
 }
+
+impl<T> FixedPointValue<T>
+where
+	T: Denomination,
+	T::Scalar: Copy + Eq + PartialOrd,
+	T::Scalar: From<u128>,
+	T::Scalar: Sub<Output = T::Scalar>,
+	T::Scalar: Div<Output = T::Scalar>,
+	T::Scalar: Rem<Output = T::Scalar>,
+	T::Scalar: ConstOne + ConstZero {
+	#[inline]
+	#[must_use]
+	pub fn round_away_from_zero(self) -> Self {
+		let n: T::Scalar = self.0;
+		let base: T::Scalar = T::BASE.into();
+
+		if n % base == T::Scalar::ZERO {
+			let n: Self = Self(n);
+
+			return n
+		}
+
+		if n < T::Scalar::ZERO {
+			let n: T::Scalar = n / base;
+			let n: T::Scalar = n * base;
+			let n: T::Scalar = n - base;
+			let n: Self = Self(n);
+
+			return n
+		}
+
+		let n: T::Scalar = n / base;
+		let n: T::Scalar = n * base;
+		let n: T::Scalar = n + base;
+		let n: Self = Self(n);
+
+		n
+	}
+}
