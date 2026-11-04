@@ -3,7 +3,7 @@ name = "reliq"
 version = "0.4.1"
 edition = "2024"
 description = "Fixed-point data type collection"
-license = "Apache-2.0"
+license = "MIT OR Apache-2.0"
 readme = "readme.md"
 
 [dependencies]

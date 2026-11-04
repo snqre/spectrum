@@ -41,4 +41,4 @@ fn main() -> Result {
 
 # License
 
-Licensed under the Apache-2.0 license.
+[MIT](./LICENSE.mit) or [Apache-2.0](./LICENSE.apache_2_0)
