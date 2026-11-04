@@ -74,3 +74,22 @@ where
 		n
 	}
 }
+
+impl<T> FixedPointValue<T>
+where
+	T: Denomination,
+	T::Scalar: Copy + From<u128>,
+	T::Scalar: Mul<Output = T::Scalar>,
+	T::Scalar: Div<Output = T::Scalar> {
+	#[inline]
+	#[must_use]
+	pub fn round_towards_zero(self) -> Self {
+		let base: T::Scalar = T::BASE.into();
+		let n: T::Scalar = self.0;
+		let n: T::Scalar = n / base;
+		let n: T::Scalar = n * base;
+		let n: Self = Self(n);
+
+		n
+	}
+}
