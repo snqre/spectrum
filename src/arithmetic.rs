@@ -396,6 +396,36 @@ where
 	}
 }
 
+impl<T> Rem for FixedPointValue<T>
+where
+	T: Denomination,
+	T::Scalar: Rem<T::Scalar, Output = T::Scalar> {
+	type Output = Self;
+
+	#[inline]
+	fn rem(self, rhs: Self) -> Self::Output {
+		let lhs: T::Scalar = self.0;
+		let rhs: T::Scalar = rhs.0;
+
+		Self(lhs % rhs)
+	}
+}
+
+impl<T> Rem<&FixedPointValue<T>> for FixedPointValue<T>
+where
+	T: Denomination,
+	T::Scalar: Copy,
+	T::Scalar: Rem<T::Scalar, Output = T::Scalar> {
+	type Output = Self;
+
+	fn rem(self, rhs: &FixedPointValue<T>) -> Self::Output {
+		let lhs: T::Scalar = self.0;
+		let rhs: T::Scalar = rhs.0;
+
+		Self(lhs % rhs)
+	}
+}
+
 impl<T> CheckedAdd for FixedPointValue<T>
 where
 	T: Denomination,
@@ -592,6 +622,38 @@ mod borrow {
 
 			#[allow(clippy::unwrap_used, reason = "unchecked operation")]
 			FixedPointValue(FixedPointValue::<T>::div(lhs, rhs).unwrap())
+		}
+	}
+
+	impl<T> Rem<FixedPointValue<T>> for &FixedPointValue<T>
+	where
+		T: Denomination,
+		T::Scalar: Copy,
+		T::Scalar: Rem<T::Scalar, Output = T::Scalar> {
+		type Output = FixedPointValue<T>;
+
+		#[inline]
+		fn rem(self, rhs: FixedPointValue<T>) -> Self::Output {
+			let lhs: T::Scalar = self.0;
+			let rhs: T::Scalar = rhs.0;
+
+			FixedPointValue(lhs % rhs)
+		}
+	}
+
+	impl<T> Rem<&FixedPointValue<T>> for &FixedPointValue<T>
+	where
+		T: Denomination,
+		T::Scalar: Copy,
+		T::Scalar: Rem<T::Scalar, Output = T::Scalar> {
+		type Output = FixedPointValue<T>;
+
+		#[inline]
+		fn rem(self, rhs: &FixedPointValue<T>) -> Self::Output {
+			let lhs: T::Scalar = self.0;
+			let rhs: T::Scalar = rhs.0;
+
+			FixedPointValue(lhs % rhs)
 		}
 	}
 }
