@@ -59,10 +59,13 @@ pub type Result<T = ()> = core::result::Result<T, Error>;
 pub enum Error {
 	#[error("arithmetic overflow")]
 	ArithmeticOverflow,
+
 	#[error("arithmetic underflow")]
 	ArithmeticUnderflow,
-	#[error("division by zero")]
+
+	#[error("arithmetic division by zero")]
 	DivisionByZero,
+
 	#[error("unsupported exponent")]
 	UnsupportedExponent
 }
@@ -73,92 +76,131 @@ pub trait Denomination {
 	const EXPONENT: Exponent;
 	const BASE: u128 = 10u128.pow(Self::EXPONENT);
 
-	const F32_RECIPROCAL: f32 = {
-		match Self::EXPONENT {
-			1 => 1E-1,
-			2 => 1E-2,
-			3 => 1E-3,
-			4 => 1E-4,
-			5 => 1E-5,
-			6 => 1E-6,
-			7 => 1E-7,
-			8 => 1E-8,
-			9 => 1E-9,
-			10 => 1E-10,
-			11 => 1E-11,
-			12 => 1E-12,
-			13 => 1E-13,
-			14 => 1E-14,
-			15 => 1E-15,
-			16 => 1E-16,
-			17 => 1E-17,
-			18 => 1E-18,
-			19 => 1E-19,
-			20 => 1E-20,
-			21 => 1E-21,
-			22 => 1E-22,
-			23 => 1E-23,
-			24 => 1E-24,
-			25 => 1E-25,
-			26 => 1E-26,
-			27 => 1E-27,
-			28 => 1E-28,
-			29 => 1E-29,
-			30 => 1E-30,
-			31 => 1E-31,
-			32 => 1E-32,
-			33 => 1E-33,
-			34 => 1E-34,
-			35 => 1E-35,
-			36 => 1E-36,
-			37 => 1E-37,
-			38 => 1E-38,
-			_ => panic!()
-		}
+	#[allow(clippy::large_digit_groups)]
+	const PI: u128 = match Self::EXPONENT {
+		1 => 3_1,
+		2 => 3_14,
+		3 => 3_141,
+		4 => 3_1415,
+		5 => 3_14159,
+		6 => 3_141592,
+		7 => 3_1415926,
+		8 => 3_14159265,
+		9 => 3_141592653,
+		10 => 3_1415926535,
+		11 => 3_14159265358,
+		12 => 3_141592653589,
+		13 => 3_1415926535897,
+		14 => 3_14159265358979,
+		15 => 3_141592653589793,
+		16 => 3_1415926535897932,
+		17 => 3_14159265358979323,
+		18 => 3_141592653589793238,
+		19 => 3_1415926535897932384,
+		20 => 3_14159265358979323846,
+		21 => 3_141592653589793238462,
+		22 => 3_1415926535897932384626,
+		23 => 3_14159265358979323846264,
+		24 => 3_141592653589793238462643,
+		25 => 3_1415926535897932384626433,
+		26 => 3_14159265358979323846264338,
+		27 => 3_141592653589793238462643383,
+		28 => 3_1415926535897932384626433832,
+		29 => 3_14159265358979323846264338327,
+		30 => 3_141592653589793238462643383279,
+		31 => 3_1415926535897932384626433832795,
+		32 => 3_14159265358979323846264338327950,
+		33 => 3_141592653589793238462643383279502,
+		34 => 3_1415926535897932384626433832795028,
+		35 => 3_14159265358979323846264338327950288,
+		36 => 3_141592653589793238462643383279502884,
+		37 => 3_1415926535897932384626433832795028841,
+		38 => 3_14159265358979323846264338327950288419,
+		_ => panic!("unsupported exponent")
 	};
 
-	const F64_RECIPROCAL: f64 = {
-		match Self::EXPONENT {
-			1 => 1E-1,
-			2 => 1E-2,
-			3 => 1E-3,
-			4 => 1E-4,
-			5 => 1E-5,
-			6 => 1E-6,
-			7 => 1E-7,
-			8 => 1E-8,
-			9 => 1E-9,
-			10 => 1E-10,
-			11 => 1E-11,
-			12 => 1E-12,
-			13 => 1E-13,
-			14 => 1E-14,
-			15 => 1E-15,
-			16 => 1E-16,
-			17 => 1E-17,
-			18 => 1E-18,
-			19 => 1E-19,
-			20 => 1E-20,
-			21 => 1E-21,
-			22 => 1E-22,
-			23 => 1E-23,
-			24 => 1E-24,
-			25 => 1E-25,
-			26 => 1E-26,
-			27 => 1E-27,
-			28 => 1E-28,
-			29 => 1E-29,
-			30 => 1E-30,
-			31 => 1E-31,
-			32 => 1E-32,
-			33 => 1E-33,
-			34 => 1E-34,
-			35 => 1E-35,
-			36 => 1E-36,
-			37 => 1E-37,
-			38 => 1E-38,
-			_ => panic!()
-		}
+	const F32_RECIPROCAL: f32 = match Self::EXPONENT {
+		1 => 1E-1,
+		2 => 1E-2,
+		3 => 1E-3,
+		4 => 1E-4,
+		5 => 1E-5,
+		6 => 1E-6,
+		7 => 1E-7,
+		8 => 1E-8,
+		9 => 1E-9,
+		10 => 1E-10,
+		11 => 1E-11,
+		12 => 1E-12,
+		13 => 1E-13,
+		14 => 1E-14,
+		15 => 1E-15,
+		16 => 1E-16,
+		17 => 1E-17,
+		18 => 1E-18,
+		19 => 1E-19,
+		20 => 1E-20,
+		21 => 1E-21,
+		22 => 1E-22,
+		23 => 1E-23,
+		24 => 1E-24,
+		25 => 1E-25,
+		26 => 1E-26,
+		27 => 1E-27,
+		28 => 1E-28,
+		29 => 1E-29,
+		30 => 1E-30,
+		31 => 1E-31,
+		32 => 1E-32,
+		33 => 1E-33,
+		34 => 1E-34,
+		35 => 1E-35,
+		36 => 1E-36,
+		37 => 1E-37,
+		38 => 1E-38,
+		_ => panic!("unsupported exponent")
+	};
+
+	const F64_RECIPROCAL: f64 = match Self::EXPONENT {
+		1 => 1E-1,
+		2 => 1E-2,
+		3 => 1E-3,
+		4 => 1E-4,
+		5 => 1E-5,
+		6 => 1E-6,
+		7 => 1E-7,
+		8 => 1E-8,
+		9 => 1E-9,
+		10 => 1E-10,
+		11 => 1E-11,
+		12 => 1E-12,
+		13 => 1E-13,
+		14 => 1E-14,
+		15 => 1E-15,
+		16 => 1E-16,
+		17 => 1E-17,
+		18 => 1E-18,
+		19 => 1E-19,
+		20 => 1E-20,
+		21 => 1E-21,
+		22 => 1E-22,
+		23 => 1E-23,
+		24 => 1E-24,
+		25 => 1E-25,
+		26 => 1E-26,
+		27 => 1E-27,
+		28 => 1E-28,
+		29 => 1E-29,
+		30 => 1E-30,
+		31 => 1E-31,
+		32 => 1E-32,
+		33 => 1E-33,
+		34 => 1E-34,
+		35 => 1E-35,
+		36 => 1E-36,
+		37 => 1E-37,
+		38 => 1E-38,
+		_ => panic!("unsupported exponent")
 	};
 }
 
@@ -189,6 +231,12 @@ where
 	pub fn as_inner(&self) -> T::Scalar {
 		self.0
 	}
+}
+
+impl<const A: Dimension, B: Denomination> Space<A> for FixedPointValue<B> {
+	const DIMENSION: usize = A;
+
+	type Scalar = B::Scalar;
 }
 
 pub type U8F1 = FixedPointValue<With<1, u8>>;
@@ -357,20 +405,31 @@ pub type I128F38 = FixedPointValue<With<38, i128>>;
 
 pub type Dimension = usize;
 
-pub trait Shape<const T: Dimension> {
+pub trait Space<const T: Dimension> {
 	const DIMENSION: usize = T;
 
 	type Scalar;
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
 pub struct Point<const A: Dimension, B>([B::Scalar; A])
 where
-	B: Shape<A>;
+	B: Space<A>;
+
+impl<const A: Dimension, B> Default for Point<A, B>
+where
+	B: Space<A>,
+	B::Scalar: ConstZero {
+	fn default() -> Self {
+    	Self(core::array::from_fn(|_| {
+     		B::Scalar::ZERO
+     	}))
+	}
+}
 
 impl<const A: Dimension, B> Index<usize> for Point<A, B>
 where
-	B: Shape<A> {
+	B: Space<A> {
 	type Output = B::Scalar;
 
 	fn index(&self, index: usize) -> &Self::Output {
@@ -380,7 +439,7 @@ where
 
 impl<const A: Dimension, B> IndexMut<usize> for Point<A, B>
 where
-	B: Shape<A> {
+	B: Space<A> {
 	fn index_mut(&mut self, index: usize) -> &mut Self::Output {
     	&mut self.0[index]
 	}
@@ -388,7 +447,7 @@ where
 
 impl<T> Point<2, T>
 where
-	T: Shape<2> {
+	T: Space<2> {
 	pub fn new(x: T::Scalar, y: T::Scalar) -> Self {
 		Self([x, y])
 	}
@@ -396,7 +455,7 @@ where
 
 impl<T> Point<2, T>
 where
-	T: Shape<2> {
+	T: Space<2> {
 	pub fn x(&self) -> &T::Scalar {
 		self.0.first().unwrap_or_else(|| unsafe {
 			core::hint::unreachable_unchecked()
@@ -412,7 +471,7 @@ where
 
 impl<T> Point<3, T>
 where
-	T: Shape<3> {
+	T: Space<3> {
 	pub fn new(
 		x: T::Scalar,
 		y: T::Scalar,
@@ -424,7 +483,7 @@ where
 
 impl<T> Point<3, T>
 where
-	T: Shape<3> {
+	T: Space<3> {
 	pub fn x(&self) -> &T::Scalar {
 		self.0.first().unwrap_or_else(|| unsafe {
 			core::hint::unreachable_unchecked()
@@ -449,3 +508,13 @@ pub type Point2DU8F2 = Point<2, U8F2>;
 
 pub type Point2DI8F1 = Point<2, I8F1>;
 pub type Point2DI8F2 = Point<2, I8F2>;
+
+pub type Point2DU16F1 = Point<2, U16F1>;
+pub type Point2DU16F2 = Point<2, U16F2>;
+pub type Point2DU16F3 = Point<2, U16F3>;
+pub type Point2DU16F4 = Point<2, U16F4>;
+
+pub type Point2DI16F1 = Point<2, I16F1>;
+pub type Point2DI16F2 = Point<2, I16F2>;
+pub type Point2DI16F3 = Point<2, I16F3>;
+pub type Point2DI16F4 = Point<2, I16F4>;
