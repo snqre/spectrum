@@ -47,6 +47,7 @@ modwire::expose! {
 	pub eq
 	pub exponent
 	pub fmt
+	pub lerp
 	pub ord
 	pub round
 	pub sqrt
