@@ -22,7 +22,6 @@ where
 	<T::Scalar as NextWidest>::Scalar: Rem<Output = <T::Scalar as NextWidest>::Scalar> {
 
 	#[inline]
-	#[must_use]
 	pub fn sin(self) -> Self {
 		let (out, _) = self.sincos();
 
@@ -30,7 +29,6 @@ where
 	}
 
 	#[inline]
-	#[must_use]
 	pub fn cos(self) -> Self {
 		let (_, out) = self.sincos();
 
@@ -38,7 +36,10 @@ where
 	}
 
 	#[inline]
-	#[must_use]
+	pub fn tan(self) -> Self {
+		self.sin() / self.cos()
+	}
+
 	fn sincos(self) -> (Self, Self) {
 		let n: T::Scalar = self.0;
 		let n: <T::Scalar as NextWidest>::Scalar = n.into_next_widest_scalar();
@@ -212,5 +213,18 @@ mod test {
 
 		assert_eq!(sin, expected_sin, "failed sin");
 		assert_eq!(cos, expected_cos, "failed cos");
+	}
+
+	#[rstest::rstest]
+	#[case(0_00.as_fixed_point_value(), 0_00.as_fixed_point_value())]
+	#[case((-0_52).as_fixed_point_value(), (-0_56).as_fixed_point_value())]
+	#[case(1_00.as_fixed_point_value(), 1_55.as_fixed_point_value())]
+	#[case((-1_00).as_fixed_point_value(), (-1_58).as_fixed_point_value())]
+	#[case(0_50.as_fixed_point_value(), 0_54.as_fixed_point_value())]
+	#[case((-0_50).as_fixed_point_value(), (-0_55).as_fixed_point_value())]
+	#[case(0_25.as_fixed_point_value(), 0_25.as_fixed_point_value())]
+	#[case((-0_25).as_fixed_point_value(), (-0_25).as_fixed_point_value())]
+	fn tan(#[case] value: I64F2, #[case] expected: I64F2) {
+		assert_eq!(value.tan(), expected);
 	}
 }
