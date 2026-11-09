@@ -280,6 +280,7 @@ impl<const A: Exponent, B> Denomination for With<A, B> {
 	const EXPONENT: Exponent = A;
 }
 
+#[must_use]
 pub struct FixedPointValue<T>(T::Scalar)
 where
 	T: Denomination;
