@@ -132,3 +132,14 @@ where
 		n
 	}
 }
+
+#[cfg(test)]
+mod test {
+	use super::*;
+
+	#[rstest::rstest]
+	#[case(2_45.as_fixed_point_value())]
+	fn round_up(#[case] n: I64F2) {
+		todo!()
+	}
+}
