@@ -303,8 +303,6 @@ where
 }
 
 impl<const A: Dimension, B: Denomination> Space<A> for FixedPointValue<B> {
-	const DIMENSION: usize = A;
-
 	type Scalar = B::Scalar;
 }
 
@@ -475,18 +473,16 @@ pub type I128F38 = FixedPointValue<With<38, i128>>;
 pub type Dimension = usize;
 
 pub trait Space<const T: Dimension> {
-	const DIMENSION: usize = T;
-
 	type Scalar;
 }
 
 #[must_use]
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
-pub struct Point<const A: Dimension, B>([B::Scalar; A])
+pub struct Vector<const A: Dimension, B>([B::Scalar; A])
 where
 	B: Space<A>;
 
-impl<const A: Dimension, B> Default for Point<A, B>
+impl<const A: Dimension, B> Default for Vector<A, B>
 where
 	B: Space<A>,
 	B::Scalar: ConstZero {
@@ -497,7 +493,7 @@ where
 	}
 }
 
-impl<const A: Dimension, B> Index<usize> for Point<A, B>
+impl<const A: Dimension, B> Index<usize> for Vector<A, B>
 where
 	B: Space<A> {
 	type Output = B::Scalar;
@@ -507,7 +503,7 @@ where
 	}
 }
 
-impl<const A: Dimension, B> IndexMut<usize> for Point<A, B>
+impl<const A: Dimension, B> IndexMut<usize> for Vector<A, B>
 where
 	B: Space<A> {
 	fn index_mut(&mut self, index: usize) -> &mut Self::Output {
@@ -515,7 +511,59 @@ where
 	}
 }
 
-impl<T> Point<2, T>
+impl<const A: Dimension, B> Add for Vector<A, B>
+where
+	B: Space<A>,
+	B::Scalar: Copy + Add<Output = B::Scalar> {
+	type Output = Self;
+
+	fn add(self, rhs: Self) -> Self::Output {
+    	Self(core::array::from_fn(|key| {
+     		self.0[key] + rhs.0[key]
+     	}))
+	}
+}
+
+impl<const A: Dimension, B> Sub for Vector<A, B>
+where
+	B: Space<A>,
+	B::Scalar: Copy + Sub<Output = B::Scalar> {
+	type Output = Self;
+
+	fn sub(self, rhs: Self) -> Self::Output {
+    	Self(core::array::from_fn(|key| {
+     		self.0[key] - rhs.0[key]
+     	}))
+	}
+}
+
+impl<const A: Dimension, B> Mul<B::Scalar> for Vector<A, B>
+where
+	B: Space<A>,
+	B::Scalar: Copy + Mul<Output = B::Scalar> {
+	type Output = Self;
+
+	fn mul(self, rhs: B::Scalar) -> Self::Output {
+    	Self(core::array::from_fn(|key| {
+     		self.0[key] * rhs
+     	}))
+	}
+}
+
+impl<const A: Dimension, B> Div<B::Scalar> for Vector<A, B>
+where
+	B: Space<A>,
+	B::Scalar: Copy + Div<Output = B::Scalar> {
+	type Output = Self;
+
+	fn div(self, rhs: B::Scalar) -> Self::Output {
+    	Self(core::array::from_fn(|key| {
+     		self.0[key] / rhs
+     	}))
+	}
+}
+
+impl<T> Vector<2, T>
 where
 	T: Space<2> {
 	pub fn new(x: T::Scalar, y: T::Scalar) -> Self {
@@ -523,7 +571,7 @@ where
 	}
 }
 
-impl<T> Point<2, T>
+impl<T> Vector<2, T>
 where
 	T: Space<2> {
 	pub fn x(&self) -> &T::Scalar {
@@ -539,7 +587,7 @@ where
 	}
 }
 
-impl<T> Point<3, T>
+impl<T> Vector<3, T>
 where
 	T: Space<3> {
 	pub fn new(
@@ -551,7 +599,7 @@ where
 	}
 }
 
-impl<T> Point<3, T>
+impl<T> Vector<3, T>
 where
 	T: Space<3> {
 	pub fn x(&self) -> &T::Scalar {
@@ -573,18 +621,18 @@ where
 	}
 }
 
-pub type Point2DU8F1 = Point<2, U8F1>;
-pub type Point2DU8F2 = Point<2, U8F2>;
+pub type Point2DU8F1 = Vector<2, U8F1>;
+pub type Point2DU8F2 = Vector<2, U8F2>;
 
-pub type Point2DI8F1 = Point<2, I8F1>;
-pub type Point2DI8F2 = Point<2, I8F2>;
+pub type Point2DI8F1 = Vector<2, I8F1>;
+pub type Point2DI8F2 = Vector<2, I8F2>;
 
-pub type Point2DU16F1 = Point<2, U16F1>;
-pub type Point2DU16F2 = Point<2, U16F2>;
-pub type Point2DU16F3 = Point<2, U16F3>;
-pub type Point2DU16F4 = Point<2, U16F4>;
+pub type Point2DU16F1 = Vector<2, U16F1>;
+pub type Point2DU16F2 = Vector<2, U16F2>;
+pub type Point2DU16F3 = Vector<2, U16F3>;
+pub type Point2DU16F4 = Vector<2, U16F4>;
 
-pub type Point2DI16F1 = Point<2, I16F1>;
-pub type Point2DI16F2 = Point<2, I16F2>;
-pub type Point2DI16F3 = Point<2, I16F3>;
-pub type Point2DI16F4 = Point<2, I16F4>;
+pub type Point2DI16F1 = Vector<2, I16F1>;
+pub type Point2DI16F2 = Vector<2, I16F2>;
+pub type Point2DI16F3 = Vector<2, I16F3>;
+pub type Point2DI16F4 = Vector<2, I16F4>;
