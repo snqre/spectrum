@@ -51,6 +51,7 @@ modwire::expose! {
 	pub ord
 	pub round
 	pub sqrt
+	pub trig
 	pub zero
 }
 
@@ -118,6 +119,72 @@ pub trait Denomination {
 		37 => 3_1415926535897932384626433832795028841,
 		38 => 3_14159265358979323846264338327950288419,
 		_ => panic!("unsupported exponent")
+	};
+
+	#[allow(clippy::cast_precision_loss, clippy::cast_sign_loss, clippy::cast_possible_truncation)]
+	const SIN_LUT: [u128; 1024] = {
+		let base: u128 = Self::BASE;
+
+		let mut out: [_; _] = [0; _];
+		let mut key: usize = 0;
+
+		#[allow(clippy::approx_constant, clippy::unreadable_literal)]
+		let half_pi: f64 = 1.5707963267948966;
+
+		while key < 1024 {
+			let angle: f64 = (key as f64 / 1024.0) * half_pi;
+			let angle_squared: f64 = angle * angle;
+
+			let mut term: f64 = angle;
+			let mut term_key: usize = 1;
+			let mut approximation: f64 = angle;
+			let mut pow: f64 = 1.0;
+
+			while term_key < 7 {
+				pow += 2.0;
+				term = -term * angle_squared / (pow * (pow - 1.0));
+				approximation += term;
+				term_key += 1;
+			}
+
+			out[key] = (approximation * (base as f64)) as u128;
+			key += 1;
+		}
+
+		out
+	};
+
+	#[allow(clippy::cast_precision_loss, clippy::cast_sign_loss, clippy::cast_possible_truncation)]
+	const COS_LUT: [u128; 1024] = {
+		let base: u128 = Self::BASE;
+
+		let mut out: [_; _] = [0; 1024];
+		let mut key: usize = 0;
+
+		#[allow(clippy::approx_constant, clippy::unreadable_literal)]
+		let half_pi: f64 = 1.5707963267948966;
+
+		while key < 1024 {
+			let angle: f64 = (key as f64 / 1024.0) * half_pi;
+			let theta_angle: f64 = half_pi - angle;
+			let theta_angle_squared: f64 = theta_angle * theta_angle;
+
+			let mut term: f64 = theta_angle;
+			let mut term_key: usize = 1;
+			let mut approximation: f64 = theta_angle;
+			let mut pow: f64 = 1.0;
+
+			while term_key < 7 {
+				pow += 2.0;
+				term = -term * theta_angle_squared / (pow * (pow - 1.0));
+				approximation += term;
+				term_key += 1;
+			}
+
+			out[key] = (approximation * (base as f64)) as u128;
+			key += 1;
+		}
+		out
 	};
 
 	const F32_RECIPROCAL: f32 = match Self::EXPONENT {
