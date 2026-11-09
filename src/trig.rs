@@ -23,7 +23,23 @@ where
 
 	#[inline]
 	#[must_use]
-	pub fn sincos(self) -> (Self, Self) {
+	pub fn sin(self) -> Self {
+		let (out, _) = self.sincos();
+
+		out
+	}
+
+	#[inline]
+	#[must_use]
+	pub fn cos(self) -> Self {
+		let (_, out) = self.sincos();
+
+		out
+	}
+
+	#[inline]
+	#[must_use]
+	fn sincos(self) -> (Self, Self) {
 		let n: T::Scalar = self.0;
 		let n: <T::Scalar as NextWidest>::Scalar = n.into_next_widest_scalar();
 		let n_0: <T::Scalar as NextWidest>::Scalar = <T::Scalar as NextWidest>::Scalar::zero();
