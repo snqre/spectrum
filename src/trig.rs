@@ -37,7 +37,9 @@ where
 
 	#[inline]
 	pub fn tan(self) -> Self {
-		self.sin() / self.cos()
+		let (sin, cos) = self.sincos();
+
+		sin / cos
 	}
 
 	fn sincos(self) -> (Self, Self) {
