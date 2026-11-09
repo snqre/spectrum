@@ -46,9 +46,11 @@ fn benchmark(c: &mut Criterion) {
 
 	group.bench_function("reference_sin_f64", |b| b.iter(|| black_box(20.0f64).sin()));
 	group.bench_function("reference_cos_f64", |b| b.iter(|| black_box(20.0f64).cos()));
+	group.bench_function("reference_tan_f64", |b| b.iter(|| black_box(20.0f64).tan()));
 
 	group.bench_function("sin", |b| b.iter(|| black_box(lhs).sin()));
 	group.bench_function("cos", |b| b.iter(|| black_box(lhs).cos()));
+	group.bench_function("tan", |b| b.iter(|| black_box(lhs).tan()));
 
 	group.finish();
 }
