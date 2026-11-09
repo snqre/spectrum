@@ -19,7 +19,7 @@ fn benchmark(c: &mut Criterion) {
 	let lhs: I32F2 = 20_00.as_fixed_point_value();
 	let rhs: I32F2 = 20_00.as_fixed_point_value();
 
-	group.bench_function("reference_add_f66", |b| b.iter(|| black_box(20.0) + black_box(20.0)));
+	group.bench_function("reference_add_f64", |b| b.iter(|| black_box(20.0) + black_box(20.0)));
 	group.bench_function("reference_sub_f64", |b| b.iter(|| black_box(20.0) - black_box(20.0)));
 	group.bench_function("reference_mul_f64", |b| b.iter(|| black_box(20.0) * black_box(20.0)));
 	group.bench_function("reference_div_f64", |b| b.iter(|| black_box(20.0) / black_box(20.0)));
@@ -43,6 +43,12 @@ fn benchmark(c: &mut Criterion) {
 	group.bench_function("to_isize", |b| b.iter(|| black_box(lhs).to_isize()));
 	group.bench_function("to_f32", |b| b.iter(|| black_box(lhs).to_f64()));
 	group.bench_function("to_f64", |b| b.iter(|| black_box(lhs).to_f64()));
+
+	group.bench_function("reference_sin_f64", |b| b.iter(|| black_box(20.0f64).sin()));
+	group.bench_function("reference_cos_f64", |b| b.iter(|| black_box(20.0f64).cos()));
+
+	group.bench_function("sin", |b| b.iter(|| black_box(lhs).sin()));
+	group.bench_function("cos", |b| b.iter(|| black_box(lhs).cos()));
 
 	group.finish();
 }
