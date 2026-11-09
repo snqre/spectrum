@@ -15,8 +15,6 @@ ethnum = "1.5.3"
 constime = "0.4.1"
 rstest = "0.27.0"
 modwire = "0.1.0"
-generic-array = ">=1.0.0,<2.0.0"
-typenum = "*"
 
 [dev-dependencies]
 criterion = ">=0.1.0,<1.0.0"
