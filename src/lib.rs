@@ -480,6 +480,7 @@ pub trait Space<const T: Dimension> {
 	type Scalar;
 }
 
+#[must_use]
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
 pub struct Point<const A: Dimension, B>([B::Scalar; A])
 where
