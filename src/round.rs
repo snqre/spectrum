@@ -4,7 +4,7 @@ impl<T> FixedPointValue<T>
 where
 	T: Denomination,
 	T::Scalar: Copy + Eq + PartialOrd,
-	T::Scalar: From<u128>,
+	T::Scalar: FromPrimitive,
 	T::Scalar: Div<Output = T::Scalar>,
 	T::Scalar: Rem<Output = T::Scalar>,
 	T::Scalar: ConstOne + ConstZero {
@@ -12,7 +12,9 @@ where
 	#[must_use]
 	pub fn round_up(self) -> Self {
 		let n: T::Scalar = self.0;
-		let base: T::Scalar = T::BASE.into();
+
+		#[allow(clippy::unwrap_used, reason = "unchecked operation")]
+		let base: T::Scalar = T::Scalar::from_u128(T::BASE).unwrap();
 
 		if n % base == T::Scalar::ZERO {
 			let n: Self = Self(n);
@@ -41,7 +43,7 @@ impl<T> FixedPointValue<T>
 where
 	T: Denomination,
 	T::Scalar: Copy + Eq + PartialOrd,
-	T::Scalar: From<u128>,
+	T::Scalar: FromPrimitive,
 	T::Scalar: Sub<Output = T::Scalar>,
 	T::Scalar: Div<Output = T::Scalar>,
 	T::Scalar: Rem<Output = T::Scalar>,
@@ -50,7 +52,9 @@ where
 	#[must_use]
 	pub fn round_down(self) -> Self {
 		let n: T::Scalar = self.0;
-		let base: T::Scalar = T::BASE.into();
+
+		#[allow(clippy::unwrap_used, reason = "unchecked operation")]
+		let base: T::Scalar = T::Scalar::from_u128(T::BASE).unwrap();
 
 		if n % base == T::Scalar::ZERO {
 			let n: Self = Self(n);
@@ -78,13 +82,15 @@ where
 impl<T> FixedPointValue<T>
 where
 	T: Denomination,
-	T::Scalar: Copy + From<u128>,
+	T::Scalar: Copy + FromPrimitive,
 	T::Scalar: Mul<Output = T::Scalar>,
 	T::Scalar: Div<Output = T::Scalar> {
 	#[inline]
 	#[must_use]
 	pub fn round_towards_zero(self) -> Self {
-		let base: T::Scalar = T::BASE.into();
+		#[allow(clippy::unwrap_used, reason = "unchecked operation")]
+		let base: T::Scalar = T::Scalar::from_u128(T::BASE).unwrap();
+
 		let n: T::Scalar = self.0;
 		let n: T::Scalar = n / base;
 		let n: T::Scalar = n * base;
@@ -98,7 +104,7 @@ impl<T> FixedPointValue<T>
 where
 	T: Denomination,
 	T::Scalar: Copy + Eq + PartialOrd,
-	T::Scalar: From<u128>,
+	T::Scalar: FromPrimitive,
 	T::Scalar: Sub<Output = T::Scalar>,
 	T::Scalar: Div<Output = T::Scalar>,
 	T::Scalar: Rem<Output = T::Scalar>,
@@ -107,7 +113,9 @@ where
 	#[must_use]
 	pub fn round_away_from_zero(self) -> Self {
 		let n: T::Scalar = self.0;
-		let base: T::Scalar = T::BASE.into();
+
+		#[allow(clippy::unwrap_used, reason = "unchecked operation")]
+		let base: T::Scalar = T::Scalar::from_u128(T::BASE).unwrap();
 
 		if n % base == T::Scalar::ZERO {
 			let n: Self = Self(n);
@@ -138,8 +146,29 @@ mod test {
 	use super::*;
 
 	#[rstest::rstest]
-	#[case(2_45.as_fixed_point_value())]
-	fn round_up(#[case] n: I64F2) {
-		todo!()
+	#[case(2_45.as_fixed_point_value(), 3_00.as_fixed_point_value())]
+	#[case(2_00.as_fixed_point_value(), 2_00.as_fixed_point_value())]
+	#[case((-2_45).as_fixed_point_value(), (-2_00).as_fixed_point_value())]
+	#[case(0_50.as_fixed_point_value(), 1_00.as_fixed_point_value())]
+	fn round_up(#[case] n: I64F2, #[case] expected: I64F2) {
+		assert_eq!(n.round_up(), expected);
+	}
+
+	#[rstest::rstest]
+	#[case(2_45.as_fixed_point_value(), 2_00.as_fixed_point_value())]
+	fn round_down(#[case] n: I64F2, #[case] expected: I64F2) {
+		assert_eq!(n.round_down(), expected);
+	}
+
+	#[rstest::rstest]
+	#[case(2_45.as_fixed_point_value(), 2_00.as_fixed_point_value())]
+	fn round_towards_zero(#[case] n: I64F2, #[case] expected: I64F2) {
+		assert_eq!(n.round_towards_zero(), expected);
+	}
+
+	#[rstest::rstest]
+	#[case(2_45.as_fixed_point_value(), 3_00.as_fixed_point_value())]
+	fn round_away_from_zero(#[case] n: I64F2, #[case] expected: I64F2) {
+		assert_eq!(n.round_away_from_zero(), expected);
 	}
 }
