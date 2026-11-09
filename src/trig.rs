@@ -224,7 +224,9 @@ mod test {
 	#[case((-0_50).as_fixed_point_value(), (-0_55).as_fixed_point_value())]
 	#[case(0_25.as_fixed_point_value(), 0_25.as_fixed_point_value())]
 	#[case((-0_25).as_fixed_point_value(), (-0_25).as_fixed_point_value())]
-	fn tan(#[case] value: I64F2, #[case] expected: I64F2) {
-		assert_eq!(value.tan(), expected);
+	fn tan(#[case] n: I64F2, #[case] expected: I64F2) {
+		let got: I64F2 = n.tan();
+
+		assert_eq!(got, expected);
 	}
 }
