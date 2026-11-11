@@ -32,3 +32,18 @@ where
     	Self(self.into_inner() / rhs)
 	}
 }
+
+#[cfg(test)]
+mod test {
+	use super::*;
+
+	#[test]
+	fn raw_mul() {
+		let _ = I64F2::from_f64(2.0).expect("new unit").raw_mul(2);
+	}
+
+	#[test]
+	fn raw_div() {
+		let _ = I64F2::from_f64(2.0).expect("new unit").raw_div(2);
+	}
+}
