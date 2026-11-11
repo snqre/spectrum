@@ -17,6 +17,17 @@ pub struct Vec<const A: Dimension, B>([B::Scalar; A])
 where
 	B: Space<A>;
 
+impl<const A: Dimension, B> Vec<A, B>
+where
+	B: Space<A>,
+	B::Scalar: Copy {
+	pub fn from_splat(x: B::Scalar) -> Self {
+		Self(core::array::from_fn(|_| {
+			x
+		}))
+	}
+}
+
 impl<const A: Dimension, B> Default for Vec<A, B>
 where
 	B: Space<A>,
