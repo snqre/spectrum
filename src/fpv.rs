@@ -238,6 +238,8 @@ pub trait Denomination {
 	};
 }
 
+
+#[derive(Default)]
 pub struct With<const A: Exponent, B>(PhantomData<B>);
 
 impl<const A: Exponent, B> Denomination for With<A, B> {
