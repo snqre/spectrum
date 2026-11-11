@@ -27,6 +27,8 @@
 				pkgs.cocogitto
 				pkgs.pre-commit
 				pkgs.pkg-config
+				pkgs.cargo-info
+				pkgs.cargo-whatfeatures
 			];
 
 			buildInputs = [
