@@ -5,6 +5,7 @@ mod conversion;
 mod index;
 mod index_mut;
 mod iter;
+mod lerp;
 
 pub type Dimension = usize;
 

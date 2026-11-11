@@ -269,7 +269,7 @@ where
 }
 
 impl<const A: vec::Dimension, B: Denomination> vec::Space<A> for FixedPointValue<B> {
-	type Scalar = B::Scalar;
+	type Scalar = Self;
 }
 
 pub type U8F1 = FixedPointValue<With<1, u8>>;
