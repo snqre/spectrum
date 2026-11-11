@@ -14,7 +14,9 @@ pub mod exponent;
 mod fmt;
 mod lerp;
 mod ord;
-mod raw;
+
+pub mod raw;
+
 mod round;
 mod sqrt;
 mod trig;
