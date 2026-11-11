@@ -478,11 +478,23 @@ pub trait Space<const T: Dimension> {
 
 #[must_use]
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
-pub struct Vector<const A: Dimension, B>([B::Scalar; A])
+pub struct Vec<const A: Dimension, B>([B::Scalar; A])
 where
 	B: Space<A>;
 
-impl<const A: Dimension, B> Default for Vector<A, B>
+impl<const A: Dimension, B> Vec<A, B>
+where
+	B: Space<A> {
+	pub fn iter(&self) -> core::slice::Iter<'_, B::Scalar> {
+		self.0.iter()
+	}
+
+	pub fn iter_mut(&mut self) -> core::slice::IterMut<'_, B::Scalar> {
+		self.0.iter_mut()
+	}
+}
+
+impl<const A: Dimension, B> Default for Vec<A, B>
 where
 	B: Space<A>,
 	B::Scalar: ConstZero {
@@ -493,7 +505,7 @@ where
 	}
 }
 
-impl<const A: Dimension, B> Index<usize> for Vector<A, B>
+impl<const A: Dimension, B> Index<usize> for Vec<A, B>
 where
 	B: Space<A> {
 	type Output = B::Scalar;
@@ -503,7 +515,7 @@ where
 	}
 }
 
-impl<const A: Dimension, B> IndexMut<usize> for Vector<A, B>
+impl<const A: Dimension, B> IndexMut<usize> for Vec<A, B>
 where
 	B: Space<A> {
 	fn index_mut(&mut self, index: usize) -> &mut Self::Output {
@@ -511,7 +523,40 @@ where
 	}
 }
 
-impl<const A: Dimension, B> Add for Vector<A, B>
+impl<const A: Dimension, B> IntoIterator for Vec<A, B>
+where
+	B: Space<A> {
+	type Item = B::Scalar;
+	type IntoIter = core::array::IntoIter<B::Scalar, A>;
+
+	fn into_iter(self) -> Self::IntoIter {
+		self.0.into_iter()
+	}
+}
+
+impl<'a, const A: Dimension, B> IntoIterator for &'a Vec<A, B>
+where
+	B: Space<A> {
+	type Item = &'a B::Scalar;
+	type IntoIter = core::slice::Iter<'a, B::Scalar>;
+
+	fn into_iter(self) -> Self::IntoIter {
+		self.iter()
+	}
+}
+
+impl<'a, const A: Dimension, B> IntoIterator for &'a mut Vec<A, B>
+where
+	B: Space<A> {
+	type Item = &'a mut B::Scalar;
+	type IntoIter = core::slice::IterMut<'a, B::Scalar>;
+
+	fn into_iter(self) -> Self::IntoIter {
+		self.iter_mut()
+	}
+}
+
+impl<const A: Dimension, B> Add for Vec<A, B>
 where
 	B: Space<A>,
 	B::Scalar: Copy + Add<Output = B::Scalar> {
@@ -524,7 +569,7 @@ where
 	}
 }
 
-impl<const A: Dimension, B> Sub for Vector<A, B>
+impl<const A: Dimension, B> Sub for Vec<A, B>
 where
 	B: Space<A>,
 	B::Scalar: Copy + Sub<Output = B::Scalar> {
@@ -537,7 +582,7 @@ where
 	}
 }
 
-impl<const A: Dimension, B> Mul<B::Scalar> for Vector<A, B>
+impl<const A: Dimension, B> Mul<B::Scalar> for Vec<A, B>
 where
 	B: Space<A>,
 	B::Scalar: Copy + Mul<Output = B::Scalar> {
@@ -550,7 +595,7 @@ where
 	}
 }
 
-impl<const A: Dimension, B> Div<B::Scalar> for Vector<A, B>
+impl<const A: Dimension, B> Div<B::Scalar> for Vec<A, B>
 where
 	B: Space<A>,
 	B::Scalar: Copy + Div<Output = B::Scalar> {
@@ -563,7 +608,7 @@ where
 	}
 }
 
-impl<T> Vector<2, T>
+impl<T> Vec<2, T>
 where
 	T: Space<2> {
 	pub fn new(x: T::Scalar, y: T::Scalar) -> Self {
@@ -571,7 +616,7 @@ where
 	}
 }
 
-impl<T> Vector<2, T>
+impl<T> Vec<2, T>
 where
 	T: Space<2> {
 	pub fn x(&self) -> &T::Scalar {
@@ -587,7 +632,7 @@ where
 	}
 }
 
-impl<T> Vector<3, T>
+impl<T> Vec<3, T>
 where
 	T: Space<3> {
 	pub fn new(
@@ -599,7 +644,7 @@ where
 	}
 }
 
-impl<T> Vector<3, T>
+impl<T> Vec<3, T>
 where
 	T: Space<3> {
 	pub fn x(&self) -> &T::Scalar {
@@ -621,18 +666,18 @@ where
 	}
 }
 
-pub type Point2DU8F1 = Vector<2, U8F1>;
-pub type Point2DU8F2 = Vector<2, U8F2>;
+pub type Vec2DU8F1 = Vec<2, U8F1>;
+pub type Vec2DU8F2 = Vec<2, U8F2>;
 
-pub type Point2DI8F1 = Vector<2, I8F1>;
-pub type Point2DI8F2 = Vector<2, I8F2>;
+pub type Vec2DI8F1 = Vec<2, I8F1>;
+pub type Vec2DI8F2 = Vec<2, I8F2>;
 
-pub type Point2DU16F1 = Vector<2, U16F1>;
-pub type Point2DU16F2 = Vector<2, U16F2>;
-pub type Point2DU16F3 = Vector<2, U16F3>;
-pub type Point2DU16F4 = Vector<2, U16F4>;
+pub type Vec2DU16F1 = Vec<2, U16F1>;
+pub type Vec2DU16F2 = Vec<2, U16F2>;
+pub type Vec2DU16F3 = Vec<2, U16F3>;
+pub type Vec2DU16F4 = Vec<2, U16F4>;
 
-pub type Point2DI16F1 = Vector<2, I16F1>;
-pub type Point2DI16F2 = Vector<2, I16F2>;
-pub type Point2DI16F3 = Vector<2, I16F3>;
-pub type Point2DI16F4 = Vector<2, I16F4>;
+pub type Vec2DI16F1 = Vec<2, I16F1>;
+pub type Vec2DI16F2 = Vec<2, I16F2>;
+pub type Vec2DI16F3 = Vec<2, I16F3>;
+pub type Vec2DI16F4 = Vec<2, I16F4>;
