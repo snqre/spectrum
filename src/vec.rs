@@ -1,6 +1,7 @@
 use super::*;
 
 mod arithmetic;
+mod conversion;
 mod index;
 mod index_mut;
 mod iter;
@@ -13,6 +14,7 @@ pub trait Space<const T: Dimension> {
 
 #[must_use]
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
+#[derive(derive_more::From)]
 pub struct Vec<const A: Dimension, B>([B::Scalar; A])
 where
 	B: Space<A>;
