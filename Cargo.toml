@@ -8,13 +8,13 @@ readme = "readme.md"
 
 [dependencies]
 derive_more = ">=1.0.0,<2.0.0"
-num-traits = "0.2.19"
-duplicate = "2.0.1"
-thiserror = "2.0.21"
-ethnum = "1.5.3"
-constime = "0.4.1"
-rstest = "0.27.0"
-modwire = "0.1.0"
+num-traits = ">=0.2.19,<1.0.0"
+duplicate = ">=2.0.0,<3.0.0"
+thiserror = ">=2.0.0,<3.0.0"
+ethnum = ">=1.5.0,<2.0.0"
+constime = ">=0.1.0,<1.0.0"
+rstest = ">=0.1.0,<1.0.0"
+modwire = ">=0.1.0,<1.0.0"
 
 [dev-dependencies]
 criterion = ">=0.1.0,<1.0.0"
@@ -24,6 +24,7 @@ name = "benchmark"
 harness = false
 
 [features]
+
 default = [
 	"std",
 	"num-traits/std",
@@ -40,4 +41,5 @@ default = [
 	"derive_more/as_ref",
 	"derive_more/display"
 ]
+
 std = []
