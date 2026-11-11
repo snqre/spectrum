@@ -1,4 +1,5 @@
 use super::*;
+use exponent::Exponent;
 
 /// Allows primitive integers to be interpreted directly as fixed-point representations at a specified exponent, without performing any numerical scaling or conversion.
 pub trait AsFixedPointValue

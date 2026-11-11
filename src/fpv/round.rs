@@ -1,4 +1,5 @@
 use super::*;
+use conversion::AsFixedPointValue as _;
 
 impl<T> FixedPointValue<T>
 where

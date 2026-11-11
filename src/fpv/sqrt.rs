@@ -1,4 +1,5 @@
 use super::*;
+use arithmetic::{Sign, NextWidest};
 
 impl<T> FixedPointValue<T>
 where

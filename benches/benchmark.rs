@@ -12,7 +12,8 @@ criterion_main!(arithmetic);
 fn benchmark(c: &mut Criterion) {
 	use num_traits::FromPrimitive as _;
 	use num_traits::ToPrimitive as _;
-	use reliq::{With, AsFixedPointValue, I32F2};
+	use reliq::fpv::{With, I32F2};
+	use reliq::fpv::conversion::AsFixedPointValue as _;
 
 	let mut group: criterion::BenchmarkGroup<_> = c.benchmark_group("arithmetic");
 

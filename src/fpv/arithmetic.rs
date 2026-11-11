@@ -1,6 +1,7 @@
 use super::*;
 use ethnum::u256;
 use ethnum::i256;
+use conversion::AsFixedPointValue as _;
 
 pub trait Sign {
 	const SIGNED: bool;
