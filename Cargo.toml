@@ -4,7 +4,6 @@ version = "0.5.1"
 edition = "2024"
 description = "Fixed-point data type collection"
 license = "MIT OR Apache-2.0"
-readme = "readme.md"
 
 [dependencies]
 derive_more = ">=1.0.0,<2.0.0"
