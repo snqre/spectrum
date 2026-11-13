@@ -20,6 +20,7 @@ use core::ops::Div;
 use core::ops::DivAssign;
 use core::ops::Rem;
 use core::ops::RemAssign;
+use core::ops::Neg;
 use core::ops::Index;
 use core::ops::IndexMut;
 use core::fmt::Debug;
