@@ -86,6 +86,34 @@
 			"\\.ico$"
 		];
 
+		pre-commit.settings.hooks = {
+			cargo_clippy.enable = true;
+			cargo_clippy.name = "cargo_clippy";
+			cargo_clippy.description = "Run cargo clippy on commit";
+			cargo_clippy.entry = "${pkgs.nushell}/bin/nu -c '
+				with-env [PATH ($env.PATH | prepend \"${inputs'.fenix.packages.stable.toolchain}/bin\")] {
+					cargo clippy \
+						--all-targets \
+						--all-features \
+						-- \
+						-D warnings
+				}
+			'";
+			cargo_clippy.files = "\\.rs$";
+			cargo_clippy.pass_filenames = false;
+
+			cargo_test.enable = true;
+			cargo_test.name = "cargo_test";
+			cargo_test.description = "Run cargo test on commit";
+			cargo_test.entry = "${pkgs.nushell}/bin/nu -c '
+				with-env [PATH ($env.PATH | prepend \"${inputs'.fenix.packages.stable.toolchain}/bin\")] {
+					cargo test --all-targets --all-features
+				}
+			'";
+			cargo_test.files = "\\.rs$";
+			cargo_test.pass_filenames = false;
+		};
+
 		pre-commit.settings.hooks.cargo-readme.enable = true;
 		pre-commit.settings.hooks.cargo-readme.name = "cargo-readme";
 		pre-commit.settings.hooks.cargo-readme.description = "Automatically update docs based on rust comment";
