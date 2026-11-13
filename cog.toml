@@ -1,0 +1,11 @@
+tag_prefix = "v"
+
+pre_bump_hooks = [
+	"cargo set-version {{version}}"
+]
+
+[commit_types.feat]
+changelog_title = "Feature"
+
+[commit_types.fix]
+changelog_title = "Bug Fix"
