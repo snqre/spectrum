@@ -1,6 +1,6 @@
 [package]
 name = "reliq"
-version = "0.6.0"
+version = "0.1.0"
 edition = "2024"
 description = "Fixed-point data type collection"
 license = "MIT OR Apache-2.0"
