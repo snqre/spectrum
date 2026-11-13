@@ -2,6 +2,12 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## v0.6.0 - 2026-11-13
+#### Miscellaneous Chores
+- (**version**) v0.1.0 - (3aa332c) - snqre
+
+- - -
+
 ## v0.1.0 - 2026-11-13
 #### Feature
 - impl abs - (101a27b) - snqre
