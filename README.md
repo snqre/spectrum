@@ -1,4 +1,4 @@
-# reliq
+# `reliq-0.6.0`
 
 ### Installation
 
@@ -90,25 +90,23 @@ The following entries are very educated estimates.
 
 > `U128` types are currently unstable.
 
-```rust
-
-### `reliq::fpv::abs`
+#### `reliq::fpv::abs`
 
 Fixed-point values support sign manipulation directly:
 
 - `FixedPointValue::to_negative()`: Converts the value to its negative counterpart (returns zero unchanged).
 - `FixedPointValue::to_positive()`: Converts the value to its non-negative/absolute value.
 
-#### `reliq::fpv::round`
+##### `reliq::fpv::round`
 
 - `FixedPointValue::round_up()`
 - `FixedPointValue::round_down()`
 - `FixedPointValue::round_towards_zero()`
 - `FixedPointValue::round_away_from_zero()`
 
-#### `reliq::fpv::conversion`
+##### `reliq::fpv::conversion`
 
-##### `AsFixedPointValue`
+###### `AsFixedPointValue`
 
 Literal conversion from a primitive to a fixed-point value (no scaling applied).
 
@@ -126,8 +124,6 @@ let expected: i64 = 5_500000000;
 assert_eq!(value_content, expected);
 ```
 
-Current version: 0.6.0
+# License
 
-Some additional info here
-
-License: MIT OR Apache-2.0
+MIT OR Apache-2.0

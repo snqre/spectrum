@@ -88,8 +88,6 @@
 //!
 //! > `U128` types are currently unstable.
 //!
-//! ```
-//!
 //! ### `reliq::fpv::abs`
 //!
 //! Fixed-point values support sign manipulation directly:
