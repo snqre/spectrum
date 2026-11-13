@@ -2,10 +2,6 @@
 
 # reliq
 
-## `reliq`
-
-Fixed-point data type collection
-
 ### Installation
 
 `Cargo.toml`:
@@ -47,8 +43,12 @@ Fixed-point values support sign manipulation directly:
 
 ##### `reliq::fpv::conversion`
 
+###### `AsFixedPointValue`
+
+Literal conversion from a primitive to a fixed-point value (no scaling applied).
+
 ```rust
-	use reliq::fpv::I64F9;
+use reliq::fpv::I64F9;
 use reliq::fpv::conversion::AsFixedPointValue as _;
 
 // 5.5
