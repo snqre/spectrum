@@ -6,6 +6,24 @@ where
 	T: Denomination,
 	T::Scalar: Zero + Eq,
 	T::Scalar: Sub<Output = T::Scalar> {
+
+	/// Converts the fixed-point value to its negative counterpart.
+	///
+	/// > If the value is zero, it is returned unchanged.
+	///
+	/// # Example
+	///
+	/// ```rust
+	/// use reliq::fpv::I64F2;
+	/// use reliq::fpv::conversion::AsFixedPointValue as _;
+	///
+	/// let value: I64F2 = 5_00.as_fixed_point_value();
+	/// let value: I64F2 = value.to_negative();
+	///
+	/// let expected: I64F2 = (-5_00).as_fixed_point_value();
+	///
+	/// assert_eq!(value, expected);
+	/// ```
 	#[inline]
 	pub fn to_negative(self) -> Self {
 		let n: T::Scalar = self.0;

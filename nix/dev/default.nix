@@ -27,6 +27,7 @@
 				pkgs.cocogitto
 				pkgs.pre-commit
 				pkgs.pkg-config
+				pkgs.nushell
 				pkgs.cargo-info
 				pkgs.cargo-whatfeatures
 				pkgs.cargo-readme
@@ -88,7 +89,9 @@
 		pre-commit.settings.hooks.cargo-readme.enable = true;
 		pre-commit.settings.hooks.cargo-readme.name = "cargo-readme";
 		pre-commit.settings.hooks.cargo-readme.description = "Automatically update docs based on rust comment";
-		pre-commit.settings.hooks.cargo-readme.entry = "${pkgs.cargo-readme}/bin/cargo-readme > readme.md";
+		pre-commit.settings.hooks.cargo-readme.entry = "${pkgs.nushell}/bin/nu -c '
+			${pkgs.cargo-readme}/bin/cargo-readme readme | save README.md --force
+		'";
 		pre-commit.settings.hooks.cargo-readme.files = "^(src/.*\\.rs|Cargo\\.toml)$";
 		pre-commit.settings.hooks.cargo-readme.pass_filenames = false;
 	};
