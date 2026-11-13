@@ -1,9 +1,7 @@
-# {{crate}}
+# `{{crate}}-{{version}}`
 
 {{readme}}
 
-Current version: {{version}}
+# License
 
-Some additional info here
-
-License: {{license}}
+{{license}}
