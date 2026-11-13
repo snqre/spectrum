@@ -29,6 +29,7 @@
 				pkgs.pkg-config
 				pkgs.cargo-info
 				pkgs.cargo-whatfeatures
+				pkgs.cargo-readme
 			];
 
 			buildInputs = [
