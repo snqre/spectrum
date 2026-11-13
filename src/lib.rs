@@ -31,15 +31,31 @@
 //!
 //! Fixed-point values support sign manipulation directly:
 //!
-//! - `to_negative()`: Converts the value to its negative counterpart (returns zero unchanged).
-//! - `to_positive()`: Converts the value to its non-negative/absolute value.
+//! - `FixedPointValue::to_negative()`: Converts the value to its negative counterpart (returns zero unchanged).
+//! - `FixedPointValue::to_positive()`: Converts the value to its non-negative/absolute value.
 //!
-//! ### `reliq::fpv::round`
+//! #### `reliq::fpv::round`
 //!
-//! - `round_up()`
-//! - `round_down()`
-//! - `round_towards_zero()`
-//! - `round_away_from_zero()`
+//! - `FixedPointValue::round_up()`
+//! - `FixedPointValue::round_down()`
+//! - `FixedPointValue::round_towards_zero()`
+//! - `FixedPointValue::round_away_from_zero()`
+//!
+//! #### `reliq::fpv::conversion`
+//!
+//! ```rust
+//!	use reliq::fpv::I64F9;
+//! use reliq::fpv::conversion::AsFixedPointValue as _;
+//!
+//! // 5.5
+//! let value: i64 = 5_500000000;
+//! let value: I64F9 = value.as_fixed_point_value();
+//! let value_content: i64 = value.into_inner();
+//!
+//! let expected: i64 = 5_500000000;
+//!
+//! assert_eq!(value_content, expected);
+//! ```
 
 #![cfg_attr(not(feature = "std"), no_std)]
 #![warn(clippy::nursery)]
