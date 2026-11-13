@@ -1,22 +1,18 @@
 use super::*;
 
 pub mod arithmetic;
-
-mod bound;
-mod clone;
-
 pub mod conversion;
-
-mod eq;
-
 pub mod exponent;
-
-mod fmt;
-mod lerp;
-mod ord;
-
 pub mod raw;
 
+mod abs;
+mod bound;
+mod clone;
+mod eq;
+mod fmt;
+mod lerp;
+mod neg;
+mod ord;
 mod round;
 mod sqrt;
 mod trig;
