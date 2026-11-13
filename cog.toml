@@ -1,7 +1,9 @@
 tag_prefix = "v"
 
 pre_bump_hooks = [
-	"cargo set-version {{version}}"
+	"nu -c 'open Cargo.toml | upsert package.version \"{{version}}\" | save Cargo.toml --force'",
+
+	"cargo check"
 ]
 
 [commit_types.feat]
