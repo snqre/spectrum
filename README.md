@@ -1,3 +1,5 @@
+
+
 # reliq
 
 ## `reliq`
@@ -29,12 +31,22 @@ let expected: i32 = 5_000000000;
 assert_eq!(value.into_inner(), expected);
 ```
 
-#### Sign
+#### `reliq::fpv::abs`
 
 Fixed-point values support sign manipulation directly:
 
 - `to_negative()`: Converts the value to its negative counterpart (returns zero unchanged).
 - `to_positive()`: Converts the value to its non-negative/absolute value.
 
+#### `reliq::fpv::round`
+
+- `round_up()`
+- `round_down()`
+- `round_towards_zero()`
+- `round_away_from_zero()`
+
+Current version: 0.6.0
+
+Some additional info here
 
 License: MIT OR Apache-2.0

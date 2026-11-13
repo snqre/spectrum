@@ -27,13 +27,19 @@
 //! assert_eq!(value.into_inner(), expected);
 //! ```
 //!
-//! ### Sign
+//! ### `reliq::fpv::abs`
 //!
 //! Fixed-point values support sign manipulation directly:
 //!
 //! - `to_negative()`: Converts the value to its negative counterpart (returns zero unchanged).
 //! - `to_positive()`: Converts the value to its non-negative/absolute value.
 //!
+//! ### `reliq::fpv::round`
+//!
+//! - `round_up()`
+//! - `round_down()`
+//! - `round_towards_zero()`
+//! - `round_away_from_zero()`
 
 #![cfg_attr(not(feature = "std"), no_std)]
 #![warn(clippy::nursery)]
